@@ -2,10 +2,11 @@ import argparse
 
 
 def intro():
-    parser = argparse.ArgumentParser(description="exercise_number, minimum_or_maximum, variables_number")
+    parser = argparse.ArgumentParser(description="exercise_number, minimum_or_maximum, variables_number, max_iterations")
     parser.add_argument('exercise_number')
     parser.add_argument('minimum_or_maximum')
     parser.add_argument('variables_number')
+    parser.add_argument('max_iterations')
     args = parser.parse_args()
 
     if args.exercise_number not in ['1', '2', '3'] or args.minimum_or_maximum not in ['minimum', 'maximum']:
@@ -41,6 +42,7 @@ def exercise1_intro():
     print("2). maximum")
     extremum = int(input("Your choice: "))
     variables_number = int(input("\nChoose variables number: "))
+    max_iterations = int(input("\nChoose max iterations number: "))
 
 
 def exercise2_intro():
