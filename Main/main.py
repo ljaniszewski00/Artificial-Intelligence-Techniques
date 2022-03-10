@@ -2,14 +2,14 @@ import argparse
 
 
 def intro():
-    parser = argparse.ArgumentParser(description="exercise_number, minimum_or_maximum, variables_number, max_iterations")
-    parser.add_argument('exercise_number')
-    parser.add_argument('minimum_or_maximum')
-    parser.add_argument('variables_number')
-    parser.add_argument('max_iterations')
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser(description="exercise_number, minimum_or_maximum, variables_number, max_iterations")
+    # parser.add_argument('exercise_number')
+    # parser.add_argument('minimum_or_maximum')
+    # parser.add_argument('variables_number')
+    # parser.add_argument('max_iterations')
+    # args = parser.parse_args()
 
-    if args.exercise_number not in ['1', '2', '3'] or args.minimum_or_maximum not in ['minimum', 'maximum']:
+    # if args.exercise_number not in ['1', '2', '3'] or args.minimum_or_maximum not in ['minimum', 'maximum']:
         print("------------------------------------------------------------------")
         print("Artificial Intelligence Techniques")
         print("Lukasz Janiszewski, Jakub Muszynski")
@@ -29,20 +29,64 @@ def intro():
             exercise2_intro()
         elif user_choice == 3:
             exercise3_intro()
-    else:
-        print("HI")
+    # else:
+    #     print("HI")
 
 
 def exercise1_intro():
     print("------------------------------------------------------------------")
     print("Exercise 1 - Particle Swarm Optimization, Differential Evolution")
     print("------------------------------------------------------------------")
-    print("Do you want to find:")
-    print("1). minimum")
-    print("2). maximum")
-    extremum = int(input("Your choice: "))
-    variables_number = int(input("\nChoose variables number: "))
-    max_iterations = int(input("\nChoose max iterations number: "))
+    coefficient_method = str(input("\nDo you wish to use static, fixed coefficient? Y/N: "))
+    coefficient_method.lower()
+    while coefficient_method not in ['y', 'n']:
+        coefficient_method = str(input("\nDo you wish to use static, fixed coefficient? Y/N: "))
+        coefficient_method.lower()
+    coefficients_changed_over_iterations = False
+    if coefficient_method == 'y':
+        coefficients_changed_over_iterations = False
+    elif coefficient_method == 'n':
+        coefficients_changed_over_iterations = True
+
+    population_number = int(input("\nChoose population number: "))
+    while type(population_number) != int:
+        population_number = int(input("\nChoose correct population number: "))
+
+    print("""
+Choose function's number you would like to use:
+1). Sphere
+2). Easom
+3). Zakharov""")
+    function_number = int(input("Your choice: "))
+    while function_number not in [1, 2, 3]:
+        int(input("\nPlease choose correct function number: "))
+
+    dimension = None
+    print("Choose dimension of function: ")
+    if function_number in [1, 3]:
+        dimension = int(input("Provide dimension number from range (20, 30): "))
+    elif function_number == 2:
+        dimension = 2
+
+    print("""
+Choose algorithm stop condition:
+1). max iterations
+2). achieved accuracy""")
+    stop_condition = int(input("\nYour choice: "))
+    while stop_condition not in [1, 2]:
+        stop_condition = int(input("\nPlease provide correct stop condition number: "))
+
+    max_iterations = None
+    accuracy = None
+    if stop_condition == 1:
+        max_iterations = int(input("\nChoose max iterations number: "))
+    else:
+        if function_number == 1:
+            accuracy = 0.0001
+        elif function_number == 2:
+            accuracy = 0.000001
+        elif function_number == 3:
+            accuracy = 0.001
 
 
 def exercise2_intro():

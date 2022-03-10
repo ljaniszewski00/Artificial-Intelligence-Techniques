@@ -9,7 +9,7 @@ The scheme of PSO algorithm
 2. If end condition has not been made (max iteration number or given accuracy):
     2.1. For every particle from set:
         2.1.1. Update velocities for every particle with the formula:
-                v = wv + (c1 * r1) * (Pbest - Pi) + (c2 * r2) * (Gbest - Pi)
+                v = w * v + (c1 * r1) * (Pbest - Pi) + (c2 * r2) * (Gbest - Pi)
                     where:
                         v - particle's velocity
                         w - static parameter = 0.72984
@@ -52,53 +52,59 @@ Questions:
 
 """
 import random
-
+import numpy as np
 
 class PSO:
-    def __init__(self, function, dimension, range, accuracy, extremum, variables_number, max_iterations):
-        self.function = function
+    def __init__(self, coefficients_changed_over_iterations, population_number, function_number, dimension, max_iterations=None, accuracy=None):
+        self.coefficients_changed_over_iterations = coefficients_changed_over_iterations
+        self.population_number = population_number
+        self.function_number = function_number
         self.dimension = dimension
-        self.range = range
-        self.accuracy = accuracy
-        self.extremum = extremum
-        self.variables_number = variables_number
-        self.max_iterations = max_iterations
-
+        if max_iterations is not None:
+            self.max_iterations = max_iterations
+        if accuracy is not None:
+            self.accuracy = accuracy
         self.current_iteration = 0
-        self.particles = [[]]
-        self.velocities = [[]]
-        self.w = 0.72984
-        self.c1, self.c2 = 2.05, 2.05
+        self.w, self.c1, self.c2 = 0.72984, 2.05, 2.05
+        if function_number == 1:
+            self.range = [-100, 100]
+        elif function_number == 2 or function_number == 3:
+            self.range = [-10, 10]
+
+        self.particles = np.random.random_integers(self.range[0], self.range[1], (self.population_number, self.dimension))
+        self.velocities = np.zeros((self.population_number, self.dimension))
 
         self.local_best = []
-        self.global_best = None
-        self.assign_initial_values()
+        for particle_number in self.population_number:
+            self.local_best.append(np.amin(self.particles, axis=particle_number))
 
-    def assign_initial_values(self):
-        for particle in self.particles:
-            for value in particle:
-                value.append
-        self.local_best = max(self.particle)
-        self.global_best = max(self.particle)
-
+        self.global_best = np.amin(self.particles)
+        self.start_algorithm()
 
     def update_parameters_values(self):
-        self.w = ((0.4 * (self.current_iteration - self.max_iterations)) / pow(self.max_iterations, 2)) + 0.4
-        self.c1 = (-3 * (self.current_iteration / self.max_iterations)) + 3.5
-        self.c2 = (3 * (self.current_iteration / self.max_iterations)) + 0.5
-
+        if self.coefficients_changed_over_iterations:
+            self.w = ((0.4 * (self.current_iteration - self.max_iterations)) / pow(self.max_iterations, 2)) + 0.4
+            self.c1 = (-3 * (self.current_iteration / self.max_iterations)) + 3.5
+            self.c2 = (3 * (self.current_iteration / self.max_iterations)) + 0.5
 
     def move_particles(self):
-        new_velocities = []
-        for velocity in self.velocities:
-            new_velocities.append(velocity * self.w)
         r1 = random.uniform(0, 2)
         r2 = random.uniform(0, 2)
-        for index, velocity in enumerate(new_velocities):
-            velocity += (self.c1 * r1 * (self.local_best[index] - self.particles[index])) + \
-                        (self.c2 * r2 * (self.global_best - self.particles[index]))
 
-        self.particles += self.velocities
+        for particle_number in range(self.population_number):
+            for dimension_number in range(self.dimension):
+                new_velocity = self.w * self.velocities[particle_number, dimension_number]
+                new_velocity += (self.c1 * r1) * (self.local_best[particle_number] - self.particles[particle_number][dimension_number])
+                new_velocity += (self.c2 * r2) * (self.global_best- self.particles[particle_number][dimension_number])
+                self.velocities[particle_number][dimension_number] = new_velocity
+
+        for row_number in range(self.population_number):
+            for column_number in range(self.dimension):
+                self.particles[row_number][column_number] += self.velocities[row_number][column_number]
+
         self.current_iteration += 1
+
+    def start_algorithm(self):
+        print("TEMP")
 
 
