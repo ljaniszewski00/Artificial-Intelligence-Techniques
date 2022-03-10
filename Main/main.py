@@ -1,4 +1,5 @@
 import argparse
+from Exercise_1_PSO_DE.PSO import PSO
 
 
 def intro():
@@ -22,7 +23,7 @@ def intro():
         user_choice = int(input("Your choice: "))
         while user_choice not in [1, 2, 3]:
             print("Please choose option 1 or 2 or 3!")
-            user_choice = int(input("\nYour choice: "))
+            user_choice = int(input("Your choice: "))
         if user_choice == 1:
             exercise1_intro()
         elif user_choice == 2:
@@ -34,14 +35,15 @@ def intro():
 
 
 def exercise1_intro():
+    print()
     print("------------------------------------------------------------------")
     print("Exercise 1 - Particle Swarm Optimization, Differential Evolution")
     print("------------------------------------------------------------------")
     coefficient_method = str(input("\nDo you wish to use static, fixed coefficient? Y/N: "))
-    coefficient_method.lower()
+    coefficient_method = coefficient_method.lower()
     while coefficient_method not in ['y', 'n']:
         coefficient_method = str(input("\nDo you wish to use static, fixed coefficient? Y/N: "))
-        coefficient_method.lower()
+        coefficient_method = coefficient_method.lower()
     coefficients_changed_over_iterations = False
     if coefficient_method == 'y':
         coefficients_changed_over_iterations = False
@@ -55,26 +57,23 @@ def exercise1_intro():
     print("""
 Choose function's number you would like to use:
 1). Sphere
-2). Easom
+2). Schwefel
 3). Zakharov""")
     function_number = int(input("Your choice: "))
     while function_number not in [1, 2, 3]:
         int(input("\nPlease choose correct function number: "))
 
-    dimension = None
-    print("Choose dimension of function: ")
-    if function_number in [1, 3]:
-        dimension = int(input("Provide dimension number from range (20, 30): "))
-    elif function_number == 2:
-        dimension = 2
+    dimension = int(input("\nProvide dimension number from range (20, 30): "))
+    while dimension < 20 or dimension > 30:
+        dimension = int(input("\nProvide correct dimension number from range (20, 30): "))
 
     print("""
 Choose algorithm stop condition:
 1). max iterations
 2). achieved accuracy""")
-    stop_condition = int(input("\nYour choice: "))
+    stop_condition = int(input("Your choice: "))
     while stop_condition not in [1, 2]:
-        stop_condition = int(input("\nPlease provide correct stop condition number: "))
+        stop_condition = int(input("Please provide correct stop condition number: "))
 
     max_iterations = None
     accuracy = None
@@ -87,6 +86,11 @@ Choose algorithm stop condition:
             accuracy = 0.000001
         elif function_number == 3:
             accuracy = 0.001
+
+    pso = PSO(coefficients_changed_over_iterations, population_number, function_number, dimension, max_iterations,
+              accuracy)
+    global_best = pso.start_algorithm()
+    print(global_best)
 
 
 def exercise2_intro():
