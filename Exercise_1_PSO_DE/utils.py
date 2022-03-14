@@ -5,6 +5,9 @@ def calculate_function_value(function_number, n, x):
     value = 0
     if function_number == 1:
         for iteration_number in range(1, n):
+            # print()
+            # print(value)
+            # print()
             value += pow(x, 2)
         return value
     elif function_number == 2:
