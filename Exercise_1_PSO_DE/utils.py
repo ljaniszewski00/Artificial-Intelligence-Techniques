@@ -5,13 +5,6 @@ def calculate_function_value(function_number, particle):
     value = 0
     if function_number == 1:
         for iteration_number in range(1, len(particle.positions) + 1):
-            # print()
-            # print(value)
-            # print()
-
-            print()
-            print(value)
-            print()
             value += pow(particle.positions[iteration_number-1], 2)
         return value
     elif function_number == 2:

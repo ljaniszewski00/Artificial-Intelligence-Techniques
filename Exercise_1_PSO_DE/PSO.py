@@ -47,43 +47,87 @@ class Particle:
         self.function_range = function_range
         self.dimensions = dimensions
         self.positions = [random.uniform(function_range[0], function_range[1]) for e in range(dimensions)]
-        self.position_values_raising = [True for e in range(dimensions)]
         self.velocities = [0 for e in range(dimensions)]
-        self.local_best = self.update_local_best()
+        self.local_best = calculate_function_value(self.function_number, self)
+        self.local_best_position = self.positions
+        self.only_one = False
 
     def update_local_best(self):
-        self.local_best = calculate_function_value(self.function_number, self)
-        return self.local_best
+        function_value = calculate_function_value(self.function_number, self)
+        if function_value < self.local_best:
+            self.local_best = function_value
+            self.local_best_position = self.positions
 
     def update_positions(self):
         for position_number in range(len(self.positions)):
-            if self.position_values_raising[position_number]:
-                if self.positions[position_number] >= self.function_range[1]:
-                    self.position_values_raising[position_number] = False
-                    self.positions[position_number] -= self.velocities[position_number]
-                else:
-                    self.positions[position_number] += self.velocities[position_number]
-                self.positions[position_number] = round(self.positions[position_number], 6)
-            else:
-                if self.positions[position_number] <= self.function_range[0]:
-                    self.position_values_raising[position_number] = True
-                    self.positions[position_number] += self.velocities[position_number]
-                else:
-                    self.positions[position_number] -= self.velocities[position_number]
-                self.positions[position_number] = round(self.positions[position_number], 6)
+            # if self.positions[position_number] >= self.function_range[1]:
+            #     self.positions[position_number] -= self.velocities[position_number]
+            # else:
+            #     self.positions[position_number] += self.velocities[position_number]
+            self.positions[position_number] += self.velocities[position_number]
 
-    def update_velocities(self, w, c1, r1, c2, r2, global_best):
+            # if self.positions[position_number] > self.function_range[1]:
+            #     self.positions[position_number] = self.function_range[1]
+            #
+            # if self.positions[position_number] < self.function_range[0]:
+            #     self.positions[position_number] = self.function_range[0]
+
+            # if self.position_values_raising[position_number]:
+            #     if self.positions[position_number] >= self.function_range[1]:
+            #         self.position_values_raising[position_number] = False
+            #         self.positions[position_number] -= self.velocities[position_number]
+            #     else:
+            #         self.positions[position_number] += self.velocities[position_number]
+            #     # self.positions[position_number] = round(self.positions[position_number], 6)
+            # else:
+            #     if self.positions[position_number] <= self.function_range[0]:
+            #         self.position_values_raising[position_number] = True
+            #         self.positions[position_number] += self.velocities[position_number]
+            #     else:
+            #         self.positions[position_number] -= self.velocities[position_number]
+            #     # self.positions[position_number] = round(self.positions[position_number], 6)
+
+    def update_velocities(self, w, c1, r1, c2, r2, global_best_positions):
         for velocity_number in range(len(self.velocities)):
-            interia = w * self.velocities[velocity_number]
-            # cognitive = (c1 * r1) * (self.local_best - self.positions[velocity_number])
-            # social = (c2 * r2) * (global_best - self.positions[velocity_number])
+            if not self.only_one:
+                print()
+                print(f"w = {w}")
+                print(f"velocity value for w = {self.velocities[velocity_number]}")
+                print(f"c1 = {c1}")
+                print(f"r1 = {r1}")
+                print(f"local_best = {self.local_best}")
+                print(f"position value for cognitive = {self.positions[velocity_number]}")
+                print(f"c2 = {c2}")
+                print(f"r2 = {r2}")
+                print(f"global_best = {global_best_positions}")
+                print(f"position value for social = {self.positions[velocity_number]}")
+                # print(f"new_velocity = {new_velocity}")
+                print()
 
+            interia = w * self.velocities[velocity_number]
             cognitive = (c1 * r1) * (
-                    self.local_best - self.positions[velocity_number])
-            social = (c2 * r2) * (global_best - self.positions[velocity_number])
+                    self.local_best_position[velocity_number] - self.positions[velocity_number])
+            social = (c2 * r2) * (global_best_positions - self.positions[velocity_number])
 
             new_velocity = interia + cognitive + social
             self.velocities[velocity_number] = round(new_velocity, 6)
+
+            if not self.only_one:
+                print()
+                print(f"w = {w}")
+                print(f"velocity value for w = {self.velocities[velocity_number]}")
+                print(f"c1 = {c1}")
+                print(f"r1 = {r1}")
+                print(f"local_best = {self.local_best}")
+                print(f"position value for cognitive = {self.positions[velocity_number]}")
+                print(f"c2 = {c2}")
+                print(f"r2 = {r2}")
+                print(f"global_best = {global_best_positions}")
+                print(f"position value for social = {self.positions[velocity_number]}")
+                print(f"new_velocity = {new_velocity}")
+                print()
+
+            self.only_one = True
 
 
 class PSO:
@@ -96,7 +140,6 @@ class PSO:
         self.max_iterations = max_iterations
         self.accuracy = accuracy
 
-        self.particles_values_raising = True
         self.current_iteration = 0
         self.w, self.c1, self.c2 = 0.72984, 3.5, 0.5
         if function_number == 1:
@@ -107,7 +150,13 @@ class PSO:
         self.particles = [Particle(self.function_number, self.function_range, self.dimensions) for e in
                           range(self.population_number)]
 
-        self.global_best = self.update_global_best()
+        # Updating global best
+        local_bests = {}
+        for particle in self.particles:
+            local_bests[particle.local_best] = particle.local_best_position
+        self.global_best = min(list(local_bests.keys()))
+        self.global_best_positions = min(list(local_bests.values()))
+        # Updating global best
 
         self.start_algorithm()
 
@@ -134,11 +183,13 @@ class PSO:
             particle.update_local_best()
 
     def update_global_best(self):
-        local_bests = []
+        local_bests = {}
         for particle in self.particles:
-            local_bests.append(particle.local_best)
-        self.global_best = min(local_bests)
-        return min(local_bests)
+            local_bests[particle.local_best] = particle.local_best_position
+        minimal_local_best = min(list(local_bests.keys()))
+        if minimal_local_best < self.global_best:
+            self.global_best = minimal_local_best
+            self.global_best_positions = min(list(local_bests.values()))
 
     def move_particles(self):
         self.update_velocities()
@@ -148,21 +199,38 @@ class PSO:
         self.update_particles_local_bests()
         self.update_global_best()
 
-    def print_particles(self):
+    def print_particles_positions(self):
         print()
-        print(self.current_iteration)
+        print("Particles Positions:")
         for particle in self.particles:
-            print()
             print(particle.positions)
+        print()
+
+    def print_particles_velocities(self):
+        print()
+        print("Particles Velocities:")
+        for particle in self.particles:
+            print(particle.velocities)
         print()
 
     def start_algorithm(self):
         if self.max_iterations is not None:
             while self.current_iteration <= self.max_iterations:
-                # self.print_particles()
+                print()
+                print(f"Current iteration: {self.current_iteration}")
+                self.print_particles_velocities()
+                self.print_particles_positions()
+
                 self.move_particles()
-                self.print_particles()
-                # print(self.global_best)
+
+                self.print_particles_velocities()
+                self.print_particles_positions()
+
+                # print(f"w = {self.w}")
+                # print(f"c1 = {self.c1}")
+                # print(f"c2 = {self.c2}")
+                # print(f"Global best before moving particles: {self.global_best}")
+                # print(f"Global best after moving particles: {self.global_best}")
                 self.current_iteration += 1
         else:
             while self.global_best >= self.accuracy:
