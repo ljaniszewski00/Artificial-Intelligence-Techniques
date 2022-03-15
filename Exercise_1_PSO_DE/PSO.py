@@ -81,9 +81,17 @@ class Particle:
             interia = w * self.velocities[velocity_number]
             # cognitive = (c1 * r1) * (self.local_best - self.positions[velocity_number])
             # social = (c2 * r2) * (global_best - self.positions[velocity_number])
-            cognitive = (c1 * r1) * (self.local_best - calculate_function_value(self.function_number, self.dimensions,
+
+            if self.function_number == 4:
+                cognitive = (c1 * r1) * (
+                            self.local_best - calculate_function_value(self.function_number, self.dimensions,
+                                                                       self.positions[0], self.positions[1]))
+                social = (c2 * r2) * (global_best - calculate_function_value(self.function_number, self.dimensions,
+                                                                             self.positions[0], self.positions[1]))
+            else:
+                cognitive = (c1 * r1) * (self.local_best - calculate_function_value(self.function_number, self.dimensions,
                                                                                 self.positions[velocity_number]))
-            social = (c2 * r2) * (global_best - calculate_function_value(self.function_number, self.dimensions,
+                social = (c2 * r2) * (global_best - calculate_function_value(self.function_number, self.dimensions,
                                                                          self.positions[velocity_number]))
 
             new_velocity = interia + cognitive + social

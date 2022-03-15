@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def calculate_function_value(function_number, n, x):
+def calculate_function_value(function_number, n, x, x2=None):
     value = 0
     if function_number == 1:
         for iteration_number in range(1, n):
@@ -28,5 +28,7 @@ def calculate_function_value(function_number, n, x):
         value += pow(temp_value, 2)
         value += pow(temp_value, 4)
         return value
+    elif function_number == 4:
+        return -np.cos(x) * np.cos(x2) * np.exp(pow(-x-np.pi, 2) - pow(-x2-np.pi, 2))
 
 

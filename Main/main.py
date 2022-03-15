@@ -58,14 +58,18 @@ def exercise1_intro():
 Choose function's number you would like to use:
 1). Sphere
 2). Schwefel
-3). Zakharov""")
+3). Zakharov
+4). Easom""")
     function_number = int(input("Your choice: "))
-    while function_number not in [1, 2, 3]:
+    while function_number not in [1, 2, 3, 4]:
         int(input("\nPlease choose correct function number: "))
 
-    dimension = int(input("\nProvide dimension number from range (20, 30): "))
-    while dimension < 20 or dimension > 30:
-        dimension = int(input("\nProvide correct dimension number from range (20, 30): "))
+    if function_number == 4:
+        dimensions = 2
+    else:
+        dimensions = int(input("\nProvide dimension number from range (20, 30): "))
+        while dimensions < 20 or dimensions > 30:
+            dimensions = int(input("\nProvide correct dimension number from range (20, 30): "))
 
     print("""
 Choose algorithm stop condition:
@@ -87,7 +91,7 @@ Choose algorithm stop condition:
         elif function_number == 3:
             accuracy = 0.001
 
-    pso = PSO(coefficients_changed_over_iterations, population_number, function_number, dimension, max_iterations,
+    pso = PSO(coefficients_changed_over_iterations, population_number, function_number, dimensions, max_iterations,
               accuracy)
     global_best = pso.start_algorithm()
     print(global_best)
