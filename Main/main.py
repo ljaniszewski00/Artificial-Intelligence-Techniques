@@ -90,6 +90,8 @@ Choose algorithm stop condition:
             accuracy = 0.000001
         elif function_number == 3:
             accuracy = 0.001
+        elif function_number == 4:
+            accuracy = 0.000001
 
     pso = PSO(coefficients_changed_over_iterations, population_number, function_number, dimensions, max_iterations,
               accuracy)

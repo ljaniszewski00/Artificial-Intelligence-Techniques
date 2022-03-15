@@ -52,12 +52,8 @@ class Particle:
         self.local_best = self.update_local_best()
 
     def update_local_best(self):
-        temp_local_best = []
-        for position_number in range(len(self.positions)):
-            temp_local_best.append(
-                calculate_function_value(self.function_number, self.dimensions, self.positions[position_number]))
-        self.local_best = min(temp_local_best)
-        return min(temp_local_best)
+        self.local_best = calculate_function_value(self.function_number, self)
+        return self.local_best
 
     def update_positions(self):
         for position_number in range(len(self.positions)):
@@ -82,17 +78,9 @@ class Particle:
             # cognitive = (c1 * r1) * (self.local_best - self.positions[velocity_number])
             # social = (c2 * r2) * (global_best - self.positions[velocity_number])
 
-            if self.function_number == 4:
-                cognitive = (c1 * r1) * (
-                            self.local_best - calculate_function_value(self.function_number, self.dimensions,
-                                                                       self.positions[0], self.positions[1]))
-                social = (c2 * r2) * (global_best - calculate_function_value(self.function_number, self.dimensions,
-                                                                             self.positions[0], self.positions[1]))
-            else:
-                cognitive = (c1 * r1) * (self.local_best - calculate_function_value(self.function_number, self.dimensions,
-                                                                                self.positions[velocity_number]))
-                social = (c2 * r2) * (global_best - calculate_function_value(self.function_number, self.dimensions,
-                                                                         self.positions[velocity_number]))
+            cognitive = (c1 * r1) * (
+                    self.local_best - self.positions[velocity_number])
+            social = (c2 * r2) * (global_best - self.positions[velocity_number])
 
             new_velocity = interia + cognitive + social
             self.velocities[velocity_number] = round(new_velocity, 6)
@@ -113,7 +101,7 @@ class PSO:
         self.w, self.c1, self.c2 = 0.72984, 3.5, 0.5
         if function_number == 1:
             self.function_range = [-100, 100]
-        elif function_number == 2 or function_number == 3:
+        elif function_number in [2, 3, 4]:
             self.function_range = [-10, 10]
 
         self.particles = [Particle(self.function_number, self.function_range, self.dimensions) for e in
@@ -171,7 +159,7 @@ class PSO:
     def start_algorithm(self):
         if self.max_iterations is not None:
             while self.current_iteration <= self.max_iterations:
-                self.print_particles()
+                # self.print_particles()
                 self.move_particles()
                 self.print_particles()
                 # print(self.global_best)
