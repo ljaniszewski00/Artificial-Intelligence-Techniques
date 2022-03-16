@@ -25,8 +25,8 @@ The second one is
 The third one is
 
 ## Exercise 1 - PSO & DE    
-### Particle Swarm Optimization - algorithm can be found in `PSO.py` file      
-### Differential Evolution - algorithm can be found in `DE.py` file              
+#### Particle Swarm Optimization - algorithm can be found in `PSO.py` file      
+#### Differential Evolution - algorithm can be found in `DE.py` file              
 
 ### How To Use
 After changing directory to `[PROJECT DIR]\Main`
