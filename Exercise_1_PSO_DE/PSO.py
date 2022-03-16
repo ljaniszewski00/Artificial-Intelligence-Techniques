@@ -36,8 +36,10 @@ The scheme of PSO algorithm
         2.1.3. If particle's new position is better than local's best solution, assign it as local's best
         2.1.4. If particle's new position is better than global's best solution, assign it as global's best
 """
+import copy
 import random
-import numpy as np
+import sys
+
 from Exercise_1_PSO_DE.utils import calculate_function_value
 
 
@@ -47,68 +49,44 @@ class Particle:
         self.function_range = function_range
         self.dimensions = dimensions
         self.positions = [random.uniform(function_range[0], function_range[1]) for e in range(dimensions)]
-        self.position_values_raising = [True for e in range(dimensions)]
         self.velocities = [0 for e in range(dimensions)]
-        self.adaptation = float('inf')
+        self.adaptation = calculate_function_value(self.function_number, self)
         self.best_adaptation = self.adaptation
-        self.best_adaptation_positions = self.positions
+        self.best_adaptation_positions = copy.copy(self.positions)
 
     def update_adaptation(self):
         self.adaptation = calculate_function_value(self.function_number, self)
         if self.adaptation < self.best_adaptation:
             self.best_adaptation = self.adaptation
-            self.best_adaptation_positions = self.positions
+            self.best_adaptation_positions = copy.copy(self.positions)
 
     def update_positions(self):
-        # print("Positions before updating:")
-        # print(self.positions)
-        # print()
-        for position_number in range(len(self.positions)):
-            self.positions[position_number] += self.velocities[position_number]
-        # print("Positions after updating:")
-        # print(self.positions)
-        # print()
+        for dimension in range(self.dimensions):
+            self.positions[dimension] += self.velocities[dimension]
 
-    def update_velocities(self, w, c1, r1, c2, r2, global_best_positions):
-        # print("Velocities before updating:")
-        # print(self.velocities)
-        # print()
-        for velocity_number in range(len(self.velocities)):
-            # print(f"Updating dimension no. {velocity_number}")
-            interia = w * self.velocities[velocity_number]
+    def update_velocities(self, w, c1, c2, global_best_positions):
+        for dimension in range(self.dimensions):
+            r1 = random.uniform(0, 2)
+            r2 = random.uniform(0, 2)
+            interia = w * self.velocities[dimension]
             cognitive = (c1 * r1) * (
-                    self.best_adaptation_positions[velocity_number] - self.positions[velocity_number])
-            social = (c2 * r2) * (global_best_positions[velocity_number] - self.positions[velocity_number])
+                    self.best_adaptation_positions[dimension] - self.positions[dimension])
+            social = (c2 * r2) * (global_best_positions[dimension] - self.positions[dimension])
 
             new_velocity = interia + cognitive + social
-            self.velocities[velocity_number] = new_velocity
 
-            # if particle_number == 3:
-            #     # print(f"w = {w}")
-            #     # print(f"velocity for dimension = {self.velocities[velocity_number]}")
-            #     # print(f"c1 = {c1}")
-            #     # print(f"r1 = {r1}")
-            #     # print(f"best_adaptation_positions for dimension = {self.best_adaptation_positions[velocity_number]}")
-            #     # print(f"positions for dimension = {self.positions[velocity_number]}")
-            #     # print(f"c2 = {c2}")
-            #     # print(f"r2 = {r2}")
-            #     # print(f"global_best_positions for dimension = {global_best_positions[velocity_number]}")
-            #     # print(f"positions for dimension = {self.positions[velocity_number]}")
-            #     print()
-            #     print(f"interia = {interia}")
-            #     print(f"cognitive = {cognitive}")
-            #     print(f"social = {social}")
-            #     print()
+            if new_velocity < self.function_range[0]:
+                new_velocity = self.function_range[0]
+            elif new_velocity > self.function_range[1]:
+                new_velocity = self.function_range[1]
 
-        # print("Velocities after updating:")
-        # print(self.velocities)
-        # print()
+            self.velocities[dimension] = new_velocity
 
 
 class PSO:
-    def __init__(self, coefficients_changed_over_iterations, population_number, function_number, dimensions,
+    def __init__(self, static_coefficients, population_number, function_number, dimensions,
                  max_iterations=None, accuracy=None):
-        self.coefficients_changed_over_iterations = coefficients_changed_over_iterations
+        self.static_coefficients = static_coefficients
         self.population_number = population_number
         self.function_number = function_number
         self.dimensions = dimensions
@@ -116,17 +94,19 @@ class PSO:
         self.accuracy = accuracy
 
         self.current_iteration = 0
-        self.w, self.c1, self.c2 = 0.72984, 3.5, 0.5
+        self.w, self.c1, self.c2 = 0.72984, 0.1, 0.9
         if function_number == 1:
             self.function_range = [-100, 100]
-        elif function_number in [2, 3, 4]:
+        elif function_number == 2:
             self.function_range = [-10, 10]
+        elif function_number == 3:
+            self.function_range = [-2.048, 2.048]
 
         self.particles = [Particle(self.function_number, self.function_range, self.dimensions) for e in
                           range(self.population_number)]
         self.update_particles_adaptations()
-        self.best_global_particle = None
-        self.update_global_best()
+        self.best_global = sys.float_info.max
+        self.best_global_positions = [0 for e in range(dimensions)]
 
         self.start_algorithm()
 
@@ -138,16 +118,12 @@ class PSO:
         self.c2 = (3 * (self.current_iteration / self.max_iterations)) + 0.5
 
     def update_velocities(self):
-        r1 = random.uniform(0, 2)
-        r2 = random.uniform(0, 2)
         for index, particle in enumerate(self.particles):
-            # print(f"Updating velocity of particle no. {index}")
-            particle.update_velocities(self.w, self.c1, r1, self.c2, r2,
-                                       self.best_global_particle.best_adaptation_positions)
+            particle.update_velocities(self.w, self.c1, self.c2,
+                                       self.best_global_positions)
 
     def update_particles_positions(self):
         for index, particle in enumerate(self.particles):
-            # print(f"Updating position of particle no. {index}")
             particle.update_positions()
 
     def update_particles_adaptations(self):
@@ -156,15 +132,13 @@ class PSO:
 
     def update_global_best(self):
         for particle in self.particles:
-            if self.best_global_particle is None:
-                self.best_global_particle = particle
-                break
-            if particle.adaptation < self.best_global_particle.best_adaptation:
-                self.best_global_particle = particle
+            if particle.adaptation < self.best_global:
+                self.best_global = particle.adaptation
+                self.best_global_positions = copy.copy(particle.positions)
 
     def move_particles(self):
         self.update_velocities()
-        if self.coefficients_changed_over_iterations:
+        if not self.static_coefficients:
             self.update_parameters_values()
         self.update_particles_positions()
         self.update_particles_adaptations()
@@ -187,12 +161,11 @@ class PSO:
     def start_algorithm(self):
         if self.max_iterations is not None:
             while self.current_iteration < self.max_iterations:
-                print(self.best_global_particle.best_adaptation)
                 self.move_particles()
                 self.current_iteration += 1
         else:
-            while self.best_global_particle.best_adaptation >= self.accuracy:
+            while self.best_global >= self.accuracy:
                 self.move_particles()
                 self.current_iteration += 1
 
-        return self.best_global_particle.best_adaptation
+        return self.best_global, self.best_global_positions, self.current_iteration

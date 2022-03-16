@@ -41,19 +41,22 @@ def intro():
     else:
         if args.exercise_number == '1':
             if args.static_coefficients not in ['true', 'True', 'false', 'False', True, False] \
-                    or args.function_number not in ['1', '2', '3', '4'] or args.stop_condition_number not in ['1', '2']:
+                    or args.function_number not in ['1', '2', '3'] or args.stop_condition_number not in ['1', '2']:
                 exercise1_intro()
             else:
                 if args.stop_condition_number == '1':
                     pso = PSO(args.static_coefficients, int(args.population_number), int(args.function_number),
-                              int(args.dimensions_number),
-                              int(args.max_iterations_number_or_accuracy), None)
+                              int(args.dimensions_number), int(args.max_iterations_number_or_accuracy), None)
 
                 else:
                     pso = PSO(args.static_coefficients, int(args.population_number), int(args.function_number),
                               int(args.dimensions_number), None, float(args.max_iterations_number_or_accuracy))
-                global_best = pso.start_algorithm()
-                print(global_best)
+                best_global, best_global_positions, iterations_passed = pso.start_algorithm()
+                print(f"A minimum of a function was found and it is equal to: {best_global}")
+                print()
+                print(f"A minimum of a function is located at: {best_global_positions}")
+                print()
+                print(f"{iterations_passed} iterations passed until the solution was found")
                 print()
                 input("Press Enter to continue...")
 
@@ -87,18 +90,14 @@ def exercise1_intro():
 Choose function's number you would like to use:
 1). Sphere
 2). Schwefel
-3). Zakharov
-4). Easom""")
+3). Rosenbrock""")
     function_number = int(input("Your choice: "))
     while function_number not in [1, 2, 3, 4]:
         int(input("\nPlease choose correct function number: "))
 
-    if function_number == 4:
-        dimensions = 2
-    else:
-        dimensions = int(input("\nProvide dimension number from range (20, 30): "))
-        while dimensions < 20 or dimensions > 30:
-            dimensions = int(input("\nProvide correct dimension number from range (20, 30): "))
+    dimensions = int(input("\nProvide dimensions number: "))
+    while dimensions <= 0:
+        dimensions = int(input("\nProvide correct dimensions number: "))
 
     print("""
 Choose algorithm stop condition:
@@ -118,9 +117,7 @@ Choose algorithm stop condition:
         elif function_number == 2:
             accuracy = 0.000001
         elif function_number == 3:
-            accuracy = 0.001
-        elif function_number == 4:
-            accuracy = 0.000001
+            accuracy = 30
 
     pso = PSO(coefficients_changed_over_iterations, population_number, function_number, dimensions, max_iterations,
               accuracy)
