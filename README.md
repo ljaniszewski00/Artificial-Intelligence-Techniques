@@ -4,10 +4,10 @@
 * [General Info](#setup)
 * [Technologies](#technologies)
 * [Status](#status)
-* [Detailed descriptions and algorithms](#detailed-descriptions-and-algorithms)
-* [How To Use](#how-to-use)
-* [How It Works](#how-it-works)
-* [Examples Of Use](#examples-of-use)
+* [Detailed descriptions](#detailed-descriptions)
+* [Exercise 1 - PSO & DE](#exercise-1-pso-&-de) 
+* [Exercise 2 - ](#exercise-2-)
+* [Exercise 3 - ](#exercise-3-)
 
 ## General info
 Implementations of various algorithms used to solve complex problems
@@ -18,17 +18,17 @@ Python 3.10
 ## Status
 In Progress
 
-## Detailed descriptions and algorithms
+## Detailed descriptions
 This app consists of three exercices.
 The first one is the comparison of PSO (Particle Swarm Optimization) and DE (Differential Evolution) used in order to solve optimization problem with selected function and find it's minimum
 The second one is
 The third one is
 
+## Exercise 1 - PSO & DE    
 ### Particle Swarm Optimization - algorithm can be found in `PSO.py` file      
-### Differential Evolution - algorithm can be found in `DE.py` file       
+### Differential Evolution - algorithm can be found in `DE.py` file              
 
-
-## How To Use
+### How To Use
 After changing directory to `[PROJECT DIR]\Main`
 #### The program can be executed like:
 
@@ -72,15 +72,5 @@ Function number 2:
 
 Function number 3:     
 <img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Rosenbrock%20function%20description.png?raw=true" width="850" height="100"> 
-
-## How It Works
-
-
-## Examples Of Use
-
-`PS [YOUR DIRECTORY]\Artificial Intelligence Techniques\Main> python .\main.py 1 True 1000 1 20 1 100`
-
-#### Console Output
-<img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Sphere%20function%20description.png?raw=true" width="850" height="100"> 
 
 
