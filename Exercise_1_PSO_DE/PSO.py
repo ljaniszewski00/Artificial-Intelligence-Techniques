@@ -37,73 +37,23 @@ The scheme of PSO algorithm
         2.1.4. If particle's new position is better than global's best solution, assign it as global's best
 """
 import copy
-import random
 import sys
-
-from Exercise_1_PSO_DE.utils import calculate_function_value
-
-
-class Particle:
-    def __init__(self, function_number, function_range, dimensions):
-        self.function_number = function_number
-        self.function_range = function_range
-        self.dimensions = dimensions
-        self.positions = [random.uniform(function_range[0], function_range[1]) for e in range(dimensions)]
-        self.velocities = [0 for e in range(dimensions)]
-        self.adaptation = calculate_function_value(self.function_number, self)
-        self.best_adaptation = self.adaptation
-        self.best_adaptation_positions = copy.copy(self.positions)
-
-    def update_adaptation(self):
-        self.adaptation = calculate_function_value(self.function_number, self)
-        if self.adaptation < self.best_adaptation:
-            self.best_adaptation = self.adaptation
-            self.best_adaptation_positions = copy.copy(self.positions)
-
-    def update_positions(self):
-        for dimension in range(self.dimensions):
-            self.positions[dimension] += self.velocities[dimension]
-
-    def update_velocities(self, w, c1, c2, global_best_positions):
-        for dimension in range(self.dimensions):
-            r1 = random.uniform(0, 2)
-            r2 = random.uniform(0, 2)
-            interia = w * self.velocities[dimension]
-            cognitive = (c1 * r1) * (
-                    self.best_adaptation_positions[dimension] - self.positions[dimension])
-            social = (c2 * r2) * (global_best_positions[dimension] - self.positions[dimension])
-
-            new_velocity = interia + cognitive + social
-
-            if new_velocity < self.function_range[0]:
-                new_velocity = self.function_range[0]
-            elif new_velocity > self.function_range[1]:
-                new_velocity = self.function_range[1]
-
-            self.velocities[dimension] = new_velocity
 
 
 class PSO:
-    def __init__(self, static_coefficients, population_number, function_number, dimensions,
+    def __init__(self, static_coefficients, population_number, function_number, dimensions, particles,
                  max_iterations=None, accuracy=None):
         self.static_coefficients = static_coefficients
         self.population_number = population_number
         self.function_number = function_number
         self.dimensions = dimensions
+        self.particles = particles
         self.max_iterations = max_iterations
         self.accuracy = accuracy
 
         self.current_iteration = 0
         self.w, self.c1, self.c2 = 0.72984, 0.1, 0.9
-        if function_number == 1:
-            self.function_range = [-100, 100]
-        elif function_number == 2:
-            self.function_range = [-10, 10]
-        elif function_number == 3:
-            self.function_range = [-2.048, 2.048]
 
-        self.particles = [Particle(self.function_number, self.function_range, self.dimensions) for e in
-                          range(self.population_number)]
         self.update_particles_adaptations()
         self.best_global = sys.float_info.max
         self.best_global_positions = [0 for e in range(dimensions)]
@@ -114,8 +64,8 @@ class PSO:
         self.w = ((0.4 * (self.current_iteration - self.max_iterations)) / pow(self.max_iterations, 2)) + 0.4
         if self.w > 1:
             self.w = 0.5
-        self.c1 = (-3 * (self.current_iteration / self.max_iterations)) + 3.5
-        self.c2 = (3 * (self.current_iteration / self.max_iterations)) + 0.5
+        self.c1 = (-3 * (self.current_iteration / self.max_iterations)) + 0.1
+        self.c2 = (3 * (self.current_iteration / self.max_iterations)) + 0.9
 
     def update_velocities(self):
         for index, particle in enumerate(self.particles):
