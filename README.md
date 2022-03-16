@@ -5,7 +5,7 @@
 * [Technologies](#technologies)
 * [Status](#status)
 * [Detailed descriptions](#detailed-descriptions)
-* [Set 1 - PSO & DE](#exercise-1-pso-&-de) 
+* [Set 1 - PSO & DE](#set-1-pso-&-de) 
 * [Set 2 - ](#set-2-)
 * [Set 3 - ](#set-3-)
 
