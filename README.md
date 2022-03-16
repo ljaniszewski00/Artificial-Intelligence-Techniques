@@ -73,7 +73,7 @@ Function number 3:
 <img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Rosenbrock%20function%20description.png?raw=true" width="850" height="80"> 
 
 
-
+     
 ## Set 2 -    
  - algorithm can be found in `.py` file      
  - algorithm can be found in `.py` file              
@@ -89,7 +89,7 @@ Function number 3:
 
 #### What's more:
 
-
+      
 ## Set 3 -    
  - algorithm can be found in `.py` file      
  - algorithm can be found in `.py` file              
