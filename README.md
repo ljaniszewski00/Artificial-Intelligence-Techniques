@@ -26,14 +26,14 @@ The third one is
 
 ### Particle Swarm Optimization - algorithm
 1. For every particle from set:
-    1.1. Assign random starting position from given range
-    1.2. Calculate the current value of function with every particle's position
-    1.3. Save current position of the particle as it's best local solution
-    1.4. If particle's position is better than the global solution, assign it as global one
-    1.5. Assign random starting velocities for all particles
+    1. Assign random starting position from given range
+    2. Calculate the current value of function with every particle's position
+    3. Save current position of the particle as it's best local solution
+    4. If particle's position is better than the global solution, assign it as global one
+    5. Assign random starting velocities for all particles
 2. If end condition has not been made (max iteration number or given accuracy):
-    2.1. For every particle from set:
-        2.1.1. Update velocities for every particle with the formula:
+    For every particle from set:
+        1. Update velocities for every particle with the formula:
                 v = w * v + (c1 * r1) * (Pbest - Pi) + (c2 * r2) * (Gbest - Pi)
                     where:
                         v - particle's velocity
@@ -51,13 +51,13 @@ The third one is
                         where:
                         t - current iteration
                         N - all iterations number
-        2.1.2. Update positions for every particle with the formula:
+        2. Update positions for every particle with the formula:
                 Pi = Pi + v
                     where:
                         Pi - particle's position
                         v - particle's velocity
-        2.1.3. If particle's new position is better than local's best solution, assign it as local's best
-        2.1.4. If particle's new position is better than global's best solution, assign it as global's best
+        3. If particle's new position is better than local's best solution, assign it as local's best
+        4. If particle's new position is better than global's best solution, assign it as global's best
 
 
 ### Differential Evolution - algorithm   
@@ -99,24 +99,23 @@ or
 #### What's more:
 Function number is one of below functions:
 
-Function number 1:
-<img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Sphere%20function%20description.png?raw=true" width="600" height="200"> 
+Function number 1:    
+<img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Sphere%20function%20description.png?raw=true" width="600" height="120"> 
 
-Function number 2:
-<img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Schwefel%20function%20description.png?raw=true" width="600" height="200"> 
+Function number 2:    
+<img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Schwefel%20function%20description.png?raw=true" width="600" height="120"> 
 
-Function number 3:
-<img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Rosenbrock%20function%20description.png?raw=true" width="600" height="200"> 
+Function number 3:     
+<img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Rosenbrock%20function%20description.png?raw=true" width="600" height="120"> 
 
 ## How It Works
-After the program execution in one of the ways explained in the 'How To Use' section, it will perform calculations and depending on the starting works, it will find the solution or not.
-There will be to output files: solution_file and additional_file. They have structure as below:
+
 
 ## Examples Of Use
 
 `PS [YOUR DIRECTORY]\Artificial Intelligence Techniques\Main> python .\main.py 1 True 1000 1 20 1 100`
 
 #### Console Output
-<img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Sphere%20function%20description.png?raw=true" width="600" height="200"> 
+<img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Sphere%20function%20description.png?raw=true" width="600" height="120"> 
 
 
