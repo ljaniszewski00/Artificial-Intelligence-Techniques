@@ -5,9 +5,9 @@
 * [Technologies](#technologies)
 * [Status](#status)
 * [Detailed descriptions](#detailed-descriptions)
-* [Exercise 1 - PSO & DE](#exercise-1-pso-&-de) 
-* [Exercise 2 - ](#exercise-2-)
-* [Exercise 3 - ](#exercise-3-)
+* [Set 1 - PSO & DE](#exercise-1-pso-&-de) 
+* [Set 2 - ](#exercise-2-)
+* [Set 3 - ](#exercise-3-)
 
 ## General info
 Implementations of various algorithms used to solve complex problems
@@ -19,12 +19,12 @@ Python 3.10
 In Progress
 
 ## Detailed descriptions
-This app consists of three exercices.
-The first one is the comparison of PSO (Particle Swarm Optimization) and DE (Differential Evolution) used in order to solve optimization problem with selected function and find it's minimum
+This app consists of three sets.
+The first one consists of PSO (Particle Swarm Optimization) and DE (Differential Evolution) and uses them in order to solve optimization problem with selected function and find it's minimum.
 The second one is
 The third one is
 
-## Exercise 1 - PSO & DE    
+## Set 1 - PSO & DE    
 Particle Swarm Optimization - algorithm can be found in `PSO.py` file      
 Differential Evolution - algorithm can be found in `DE.py` file              
 
@@ -72,4 +72,36 @@ Function number 2:
 Function number 3:     
 <img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Rosenbrock%20function%20description.png?raw=true" width="850" height="80"> 
 
+
+
+## Set 2 -    
+ - algorithm can be found in `.py` file      
+ - algorithm can be found in `.py` file              
+
+### How To Use
+
+    
+#### Scheme:
+
+    
+#### Where:
+
+
+#### What's more:
+
+
+## Set 3 -    
+ - algorithm can be found in `.py` file      
+ - algorithm can be found in `.py` file              
+
+### How To Use
+
+    
+#### Scheme:
+
+    
+#### Where:
+
+
+#### What's more:
 
