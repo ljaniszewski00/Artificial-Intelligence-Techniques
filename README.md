@@ -6,8 +6,8 @@
 * [Status](#status)
 * [Detailed descriptions](#detailed-descriptions)
 * [Set 1 - PSO & DE](#exercise-1-pso-&-de) 
-* [Set 2 - ](#exercise-2-)
-* [Set 3 - ](#exercise-3-)
+* [Set 2 - ](#set-2-)
+* [Set 3 - ](#set-3-)
 
 ## General info
 Implementations of various algorithms used to solve complex problems
