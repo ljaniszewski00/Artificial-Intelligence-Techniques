@@ -47,6 +47,7 @@ class Particle:
         self.function_range = function_range
         self.dimensions = dimensions
         self.positions = [random.uniform(function_range[0], function_range[1]) for e in range(dimensions)]
+        self.position_values_raising = [True for e in range(dimensions)]
         self.velocities = [0 for e in range(dimensions)]
         self.local_best = calculate_function_value(self.function_number, self)
         self.local_best_position = self.positions
@@ -64,28 +65,29 @@ class Particle:
             #     self.positions[position_number] -= self.velocities[position_number]
             # else:
             #     self.positions[position_number] += self.velocities[position_number]
-            self.positions[position_number] += self.velocities[position_number]
 
+            # self.positions[position_number] += self.velocities[position_number]
+            #
             # if self.positions[position_number] > self.function_range[1]:
             #     self.positions[position_number] = self.function_range[1]
             #
             # if self.positions[position_number] < self.function_range[0]:
             #     self.positions[position_number] = self.function_range[0]
 
-            # if self.position_values_raising[position_number]:
-            #     if self.positions[position_number] >= self.function_range[1]:
-            #         self.position_values_raising[position_number] = False
-            #         self.positions[position_number] -= self.velocities[position_number]
-            #     else:
-            #         self.positions[position_number] += self.velocities[position_number]
-            #     # self.positions[position_number] = round(self.positions[position_number], 6)
-            # else:
-            #     if self.positions[position_number] <= self.function_range[0]:
-            #         self.position_values_raising[position_number] = True
-            #         self.positions[position_number] += self.velocities[position_number]
-            #     else:
-            #         self.positions[position_number] -= self.velocities[position_number]
-            #     # self.positions[position_number] = round(self.positions[position_number], 6)
+            if self.position_values_raising[position_number]:
+                if self.positions[position_number] >= self.function_range[1]:
+                    self.position_values_raising[position_number] = False
+                    self.positions[position_number] -= self.velocities[position_number]
+                else:
+                    self.positions[position_number] += self.velocities[position_number]
+                # self.positions[position_number] = round(self.positions[position_number], 6)
+            else:
+                if self.positions[position_number] <= self.function_range[0]:
+                    self.position_values_raising[position_number] = True
+                    self.positions[position_number] += self.velocities[position_number]
+                else:
+                    self.positions[position_number] -= self.velocities[position_number]
+                # self.positions[position_number] = round(self.positions[position_number], 6)
 
     def update_velocities(self, w, c1, r1, c2, r2, global_best_positions):
         for velocity_number in range(len(self.velocities)):
@@ -154,8 +156,9 @@ class PSO:
         local_bests = {}
         for particle in self.particles:
             local_bests[particle.local_best] = particle.local_best_position
-        self.global_best = min(list(local_bests.keys()))
-        self.global_best_positions = min(list(local_bests.values()))
+        minimal_local_best = min(list(local_bests.keys()))
+        self.global_best = minimal_local_best
+        self.global_best_positions = local_bests[minimal_local_best]
         # Updating global best
 
         self.start_algorithm()
@@ -189,7 +192,7 @@ class PSO:
         minimal_local_best = min(list(local_bests.keys()))
         if minimal_local_best < self.global_best:
             self.global_best = minimal_local_best
-            self.global_best_positions = min(list(local_bests.values()))
+            self.global_best_positions = local_bests[minimal_local_best]
 
     def move_particles(self):
         self.update_velocities()
@@ -215,7 +218,7 @@ class PSO:
 
     def start_algorithm(self):
         if self.max_iterations is not None:
-            while self.current_iteration <= self.max_iterations:
+            while self.current_iteration < self.max_iterations:
                 print()
                 print(f"Current iteration: {self.current_iteration}")
                 self.print_particles_velocities()

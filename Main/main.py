@@ -1,16 +1,24 @@
 import argparse
+import sys
+sys.path.append("Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques")
+sys.path.append("Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques/Exercise_1_PSO_DE")
+
 from Exercise_1_PSO_DE.PSO import PSO
 
 
 def intro():
-    # parser = argparse.ArgumentParser(description="exercise_number, minimum_or_maximum, variables_number, max_iterations")
-    # parser.add_argument('exercise_number')
-    # parser.add_argument('minimum_or_maximum')
-    # parser.add_argument('variables_number')
-    # parser.add_argument('max_iterations')
-    # args = parser.parse_args()
+    parser = argparse.ArgumentParser(description="exercise_number, static_coefficients, population_number, "
+                                                 "function_number, dimensions_number, stop_condition_number, max_iterations_number_or_accuracy")
+    parser.add_argument('exercise_number')
+    parser.add_argument('static_coefficients')
+    parser.add_argument('population_number')
+    parser.add_argument('function_number')
+    parser.add_argument('dimensions_number')
+    parser.add_argument('stop_condition_number')
+    parser.add_argument('max_iterations_number_or_accuracy')
+    args = parser.parse_args()
 
-    # if args.exercise_number not in ['1', '2', '3'] or args.minimum_or_maximum not in ['minimum', 'maximum']:
+    if args.exercise_number not in ['1', '2', '3']:
         print("------------------------------------------------------------------")
         print("Artificial Intelligence Techniques")
         print("Lukasz Janiszewski, Jakub Muszynski")
@@ -30,8 +38,29 @@ def intro():
             exercise2_intro()
         elif user_choice == 3:
             exercise3_intro()
-    # else:
-    #     print("HI")
+    else:
+        if args.exercise_number == '1':
+            if args.static_coefficients not in ['true', 'True', 'false', 'False', True, False] \
+                    or args.function_number not in ['1', '2', '3', '4'] or args.stop_condition_number not in ['1', '2']:
+                exercise1_intro()
+            else:
+                if args.stop_condition_number == '1':
+                    pso = PSO(args.static_coefficients, int(args.population_number), int(args.function_number),
+                              int(args.dimensions_number),
+                              int(args.max_iterations_number_or_accuracy), None)
+
+                else:
+                    pso = PSO(args.static_coefficients, int(args.population_number), int(args.function_number),
+                              int(args.dimensions_number), None, float(args.max_iterations_number_or_accuracy))
+                global_best = pso.start_algorithm()
+                print(global_best)
+                print()
+                input("Press Enter to continue...")
+
+        elif args.exercise_number == '2':
+            print("HI")
+        elif args.exercise_number == '3':
+            print("HI")
 
 
 def exercise1_intro():
