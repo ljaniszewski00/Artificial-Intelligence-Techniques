@@ -14,6 +14,9 @@ class Particle:
         self.best_adaptation = self.adaptation
         self.best_adaptation_positions = copy.copy(self.positions)
 
+    def get_particles_positions(self):
+        return self.positions
+
     def update_adaptation(self):
         self.adaptation = calculate_function_value(self.function_number, self)
         if self.adaptation < self.best_adaptation:
