@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 def calculate_function_value(function_number, particle):
     value = 0
     if function_number == 1:
@@ -21,3 +24,15 @@ def calculate_function_value(function_number, particle):
                             pow(particle.positions[iteration_number-1], 2), 2) +
                             pow(particle.positions[iteration_number-1] - 1, 2))
         return value
+
+
+def generate_chart(best_globals_iterations, pso_best_global_values, de_best_global_values=None):
+    plt.plot(best_globals_iterations, pso_best_global_values, color='r', label='PSO')
+    # # plt.plot(iterations_numbers, de_best_global_values, color='b', label='DE')
+    plt.xlim(0, max(best_globals_iterations))
+    plt.ylim(0, 1000)
+    plt.xlabel("Iteration number")
+    plt.ylabel("Best global value")
+    plt.legend()
+    plt.show()
+

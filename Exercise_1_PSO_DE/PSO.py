@@ -57,6 +57,8 @@ class PSO:
         self.update_particles_adaptations()
         self.best_global = sys.float_info.max
         self.best_global_positions = [0 for e in range(dimensions)]
+        self.best_globals = [self.best_global]
+        self.best_globals_iterations = [0]
 
         self.start_algorithm()
 
@@ -85,6 +87,8 @@ class PSO:
             if particle.adaptation < self.best_global:
                 self.best_global = particle.adaptation
                 self.best_global_positions = copy.copy(particle.positions)
+                self.best_globals.append(self.best_global)
+                self.best_globals_iterations.append(self.current_iteration)
 
     def move_particles(self):
         self.update_velocities()
@@ -114,8 +118,9 @@ class PSO:
                 self.move_particles()
                 self.current_iteration += 1
         else:
-            while self.best_global >= self.accuracy:
+            while abs(self.best_global) >= self.accuracy:
                 self.move_particles()
                 self.current_iteration += 1
 
-        return self.best_global, self.best_global_positions, self.current_iteration
+        return round(self.best_global, 4), self.best_global_positions, self.best_globals, self.best_globals_iterations, \
+               self.current_iteration

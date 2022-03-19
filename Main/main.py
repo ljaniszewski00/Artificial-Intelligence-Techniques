@@ -7,6 +7,7 @@ sys.path.append(
 
 from Exercise_1_PSO_DE.PSO import PSO
 from Exercise_1_PSO_DE.Particle import Particle
+from Exercise_1_PSO_DE.utils import generate_chart
 
 
 def intro():
@@ -92,13 +93,14 @@ def intro():
                               dimensions_number, particles, None, max_iterations_number_or_accuracy)
 
                 # Starting PSO algorithm and displaying results
-                best_global, best_global_positions, iterations_passed = pso.start_algorithm()
+                best_global, best_global_positions, best_globals, best_globals_iterations, iterations_passed = pso.start_algorithm()
                 print(f"A minimum of a function was found and it is equal to: {best_global}")
                 print()
                 print(f"A minimum of a function is located at: {best_global_positions}")
                 print()
                 print(f"{iterations_passed} iterations passed until the solution was found")
                 print()
+                generate_chart(best_globals_iterations, best_globals)
                 input("Press Enter to continue...")
 
         elif exercise_number == 2:
