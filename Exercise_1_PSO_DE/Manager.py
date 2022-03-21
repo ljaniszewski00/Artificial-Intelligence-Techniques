@@ -81,9 +81,6 @@ Choose algorithm stop condition:
     while stop_condition not in [1, 2]:
         stop_condition = int(input("Please provide correct stop condition number: "))
 
-    max_iterations = None
-    accuracy = None
-
     # Setting function range depending on selected function
     function_range = [-100, 100]
     if function_number == 1:
