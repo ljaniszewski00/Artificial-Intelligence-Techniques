@@ -1,11 +1,11 @@
 import argparse
 import sys
 
-sys.path.append("Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques")
-sys.path.append(
-    "Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques/Exercise_1_PSO_DE")
+sys.path.append("C:\\Users\\jakub\\Desktop\\DE\\Artificial-Intelligence-Techniques")
+sys.path.append("C:\\Users\\jakub\\Desktop\\DE\\Artificial-Intelligence-Techniques\\Exercise_1_PSO_DE")
 
 from Exercise_1_PSO_DE.PSO import PSO
+from Exercise_1_PSO_DE.DE.DE import DE
 from Exercise_1_PSO_DE.Particle import Particle
 from Exercise_1_PSO_DE.utils import generate_chart
 
@@ -89,20 +89,39 @@ def intro():
                     pso = PSO(static_coefficients, population_number, function_number,
                               dimensions_number, particles, max_iterations_number_or_accuracy, None)
 
+                    de = DE(particles_for_de, function_number, static_coefficients, max_iterations_number_or_accuracy, None)
+
                 else:
                     # Creating PSO with desired accuracy specified
                     pso = PSO(static_coefficients, population_number, function_number,
                               dimensions_number, particles, None, max_iterations_number_or_accuracy)
 
+                    de = DE(particles_for_de, function_number, static_coefficients, None, max_iterations_number_or_accuracy)
+
                 # Starting PSO algorithm and displaying results
-                best_global, best_global_positions, best_globals, best_globals_iterations, iterations_passed = pso.start_algorithm()
-                print(f"A minimum of a function was found and it is equal to: {best_global}")
+                pso_best_global, pso_best_global_positions, pso_best_globals, pso_best_globals_iterations, pso_iterations_passed = pso.start_algorithm()
+                de_best_global, de_best_globals, de_iterations_passed = de.doDE()
+
+                print("PSO:")
+                print(f"A minimum of a function was found and it is equal to: {pso_best_global}")
                 print()
-                print(f"A minimum of a function is located at: {best_global_positions}")
+                print(f"A minimum of a function is located at: {pso_best_global_positions}")
                 print()
-                print(f"{iterations_passed} iterations passed until the solution was found")
+                print(f"{pso_iterations_passed} iterations passed until the solution was found")
                 print()
-                generate_chart(best_globals_iterations, best_globals)
+
+                de_best_globals_iterations = [d['iteration'] for d in de_best_globals]
+                de_best_globals = [d['global_best'] for d in de_best_globals]
+                # print(de_best_globals)
+
+                print("DE:")
+                print(f"A minimum of a function was found and it is equal to: {de_best_global}")
+                print()
+                print(f"{de_iterations_passed} iterations passed until the solution was found")
+                print()
+
+                generate_chart(pso_best_globals_iterations, pso_best_globals, de_best_globals_iterations, de_best_globals)
+
                 input("Press Enter to continue...")
 
         elif exercise_number == 2:
