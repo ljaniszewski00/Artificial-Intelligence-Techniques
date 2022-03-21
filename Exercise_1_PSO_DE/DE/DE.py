@@ -1,3 +1,4 @@
+from copy import copy
 import random
 
 import numpy
@@ -7,7 +8,7 @@ class DE:
     def __init__(self,
                  particles, #List of vectors for input that are base population
                  functionNumber,  #Number of function to evaluate
-                 Cr, F, #Params for algor
+                 static_coefficients, #Boolean value to determine if coefficient will have static values
                  max_iterations=None,  # 1st of 2 variants of stopping alg
                  accuracy=None  # 2nd of 2 variants of stopping alg
                  ):
@@ -17,8 +18,12 @@ class DE:
         self.populations.append(particles)
         self.population_count = len(particles)
         self.current = particles
-        self.Cr = Cr
-        self.F = F
+        if static_coefficients:
+            self.Cr = 0.7
+            self.F = 0.5
+        else:
+            self.Cr = random.uniform(0, 0.9)
+            self.F = random.uniform(0, 1)
         self.max_iterations = max_iterations
         self.accuracy = accuracy
         self.global_bests = list()
@@ -32,10 +37,6 @@ class DE:
             case _:
                 self.function = self.Sphere
         self.global_best = self.function(self.current[0])
-
-
-        # curent = lista Particli do zabawy
-        # populations = lista list Particli historycznych
 
     def doDE(self, best=False):
         counter = 0
@@ -55,10 +56,11 @@ class DE:
             self.populations.append(appender)
             self.current = appender
             counter += 1
-            print(counter)
             if (self.max_iterations is not None and counter >= self.max_iterations) \
              or (self.accuracy is not None and self.accuracy >= self.global_best): break
-
+        # print(self.global_bests)
+        # print(counter)
+        return self.global_best, self.global_bests, counter
 
 
 
@@ -90,13 +92,11 @@ class DE:
         fxi = self.function(newXi)
         if self.global_best >  fxi:
             self.global_best = fxi
-            print(iteration, ":", fxi)
+            # print(iteration, ":", fxi)
             self.global_bests.append({
                 "iteration" : iteration,
                 "global_best" : self.global_best
             })
-
-
         return newXi
 
     def Sphere(self, xi):

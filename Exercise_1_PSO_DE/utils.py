@@ -26,11 +26,11 @@ def calculate_function_value(function_number, particle):
         return value
 
 
-def generate_chart(best_globals_iterations, pso_best_global_values, de_best_global_values=None):
-    plt.plot(best_globals_iterations, pso_best_global_values, color='r', label='PSO')
-    # # plt.plot(iterations_numbers, de_best_global_values, color='b', label='DE')
-    plt.xlim(0, max(best_globals_iterations))
-    plt.ylim(0, 1000)
+def generate_chart(pso_best_globals_iterations, pso_best_global_values, de_best_globals_iterations, de_best_global_values):
+    plt.plot(pso_best_globals_iterations, pso_best_global_values, color='r', label='PSO')
+    plt.plot(de_best_globals_iterations, de_best_global_values, color='b', label='DE')
+    # plt.xlim(0, max(pso_best_globals_iterations))
+    plt.ylim(0, 50000)
     plt.xlabel("Iteration number")
     plt.ylabel("Best global value")
     plt.legend()
