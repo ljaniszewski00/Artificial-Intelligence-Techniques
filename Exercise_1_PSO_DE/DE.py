@@ -58,7 +58,7 @@ class DE:
              or (self.accuracy is not None and self.accuracy >= self.global_best): break
         # print(self.global_bests)
         # print(counter)
-        return self.global_best, self.global_bests, counter
+        return round(self.global_best, 4), self.global_bests, counter
 
     def reproduction(self, best=False):
         index = 0
