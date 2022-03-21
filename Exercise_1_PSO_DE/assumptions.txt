@@ -1,6 +1,0 @@
-Funkcja celu ? (hardcoded - 2/3) DE:V
-Wielkośc populacji 60/90 DE:V
-Ilośc wymiarów - (20,30) DE:V
-Ilość parametrów DS(3) PSO( (dwa warianty/ oblicznane) DE:V
-Ilość przebiegów (input) , dokładność (funkcja celu) DE:V
-

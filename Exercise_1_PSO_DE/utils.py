@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import numpy as np
+
 
 def calculate_function_value(function_number, particle):
     value = 0
@@ -26,13 +26,21 @@ def calculate_function_value(function_number, particle):
         return value
 
 
-def generate_chart(best_globals_iterations, pso_best_global_values, de_best_global_values=None):
-    plt.plot(best_globals_iterations, pso_best_global_values, color='r', label='PSO')
-    # # plt.plot(iterations_numbers, de_best_global_values, color='b', label='DE')
-    plt.xlim(0, max(best_globals_iterations))
-    plt.ylim(0, 1000)
+def generate_chart(pso_best_globals_iterations, pso_best_global_values, de_best_globals_iterations, de_best_global_values):
+    plt.plot(pso_best_globals_iterations, pso_best_global_values, color='r',
+             label='Best PSO values (iteration by iteration)')
+    plt.plot(de_best_globals_iterations, de_best_global_values, color='b',
+             label='Best DE values (iteration by iteration)')
+
+    best_pso_value = round(pso_best_global_values[-1], 6)
+    best_de_value = round(de_best_global_values[-1], 6)
+
+    plt.plot(pso_best_globals_iterations[-1], best_pso_value, marker="o", markersize=7, markeredgecolor="red",
+             markerfacecolor="red", label=f"Best PSO value: {best_pso_value}")
+    plt.plot(de_best_globals_iterations[-1], best_de_value, marker="o", markersize=7, markeredgecolor="blue",
+             markerfacecolor="blue", label=f"Best DE value: {best_de_value}")
+    plt.ylim(0, 20000)
     plt.xlabel("Iteration number")
     plt.ylabel("Best global value")
     plt.legend()
     plt.show()
-
