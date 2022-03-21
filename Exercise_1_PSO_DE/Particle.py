@@ -1,6 +1,7 @@
 import random
 import copy
 from Exercise_1_PSO_DE.utils import calculate_function_value
+import numpy as np
 
 
 class Particle:
@@ -14,8 +15,8 @@ class Particle:
         self.best_adaptation = self.adaptation
         self.best_adaptation_positions = copy.copy(self.positions)
 
-    def get_particles_positions(self):
-        return self.positions
+    def get_particle_as_vector(self) -> np.ndarray:
+        return np.array(self.positions)
 
     def update_adaptation(self):
         self.adaptation = calculate_function_value(self.function_number, self)

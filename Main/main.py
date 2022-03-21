@@ -81,6 +81,8 @@ def intro():
                 # Creating particles
                 particles = [Particle(function_number, function_range, dimensions_number) for e in
                              range(int(population_number))]
+                # Parsing to vectors
+                particles_for_de = [e.get_particle_as_vector() for e in particles]
 
                 if args.stop_condition_number == '1':
                     # Creating PSO with max iterations number specified
