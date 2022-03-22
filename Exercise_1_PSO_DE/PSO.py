@@ -6,7 +6,7 @@ The scheme of PSO algorithm
     1.3. Save current position of the particle as it's best local solution
     1.4. If particle's position is better than the global solution, assign it as global one
     1.5. Assign random starting velocities for all particles
-2. If end condition has not been made (max iteration number or given accuracy):
+2. If end condition has not been fulfilled (max iteration number or given accuracy):
     2.1. For every particle from set:
         2.1.1. Update velocities for every particle with the formula:
                 v = w * v + (c1 * r1) * (Pbest - Pi) + (c2 * r2) * (Gbest - Pi)

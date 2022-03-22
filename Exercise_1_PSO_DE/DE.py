@@ -1,3 +1,28 @@
+"""
+The scheme of DE algorithm
+1. Create particles for swarm on the basis of data given by the user (dimensions number, function range, parameters)
+2. If end condition has not been fulfilled (max iteration number or given accuracy):
+    2.1. Apply reproduction step:
+        Create basic vector by making it random or by choosing the best particle from swarm
+    2.2. Apply mutation step:
+        Modify random vector by difference between two other vectors with F parameter:
+            𝑣𝑖 = 𝑥𝑟1 + 𝐹 ∙ (𝑥𝑟2 – 𝑥𝑟3),
+            where:
+                - 𝑣𝑖 is called the mutant
+                - 𝐹 is Mu factor, which is static parameter with values from range (0, 1), typically 0.5
+                - 𝑟1, 𝑟2, 𝑟3 are three randomly generated particle's numbers from set of {1, 2, ..., N}
+                - indexes of particles meet the condition: 𝑖≠𝑟1≠𝑟2≠𝑟3
+    2.3. Apply crossing step:
+        Randomly shuffle parent xi and mutant vi elements, which will cause creation of new test particle oi.
+        If rand[0, 1) < Cr or j = d, then oij = vij. Else, oij = xij,
+        where:
+            - rand[0, 1) is random number of given range, selected regardless of each j
+            - Cr is crossing coefficient - static parameter fulfilling condition 0 <= Cr <= 1
+            - d is random number of vector's element randomly chose from set {1, 2, ..., D}
+    2.4. Apply selection step:
+        If test particle oi has better adaptation than parent xi, then oi replaces parent in population.
+        If test particle oi has worse adaptation than parent xi, then oi is rejected.
+"""
 import random
 import numpy
 
