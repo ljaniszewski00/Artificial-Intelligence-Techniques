@@ -1,7 +1,7 @@
 """
 The scheme of DE algorithm
 1. Create particles for swarm on the basis of data given by the user (dimensions number, function range, parameters)
-2. If end condition has not been fulfilled (max iteration number or given accuracy):
+2. Until end condition has not been fulfilled (max iteration number or given accuracy):
     2.1. Apply reproduction step:
         Create basic vector by making it random or by choosing the best particle from swarm
     2.2. Apply mutation step:
