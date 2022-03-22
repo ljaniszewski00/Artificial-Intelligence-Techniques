@@ -6,7 +6,7 @@ sys.path.append("C:\\Users\\jakub\\Desktop\\DE\\Artificial-Intelligence-Techniqu
 sys.path.append("Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques")
 sys.path.append("Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques/Exercise_1_PSO_DE")
 
-from Exercise_1_PSO_DE.Manager import create_pso_and_de_objects, get_data_for_first_exercise, start_algorithms
+from Exercise_1_PSO_DE.PSO_DE_Manager import create_pso_and_de_objects, get_data_for_first_exercise, start_algorithms
 
 
 def intro():
