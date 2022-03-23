@@ -5,8 +5,8 @@
 * [Technologies](#technologies)
 * [Status](#status)
 * [Detailed descriptions](#detailed-descriptions)
-* [Set 1 - PSO & DE](#set-1-pso-&-de) 
-* [Set 2 - Bat & Butterfly](#set-2-bat-&-butterfly)
+* [Set 1 - PSO and DE](#set-1-pso-and-de) 
+* [Set 2 - Bat and Butterfly algorithms](#set-2-bat-and-butterfly-algorithms)
 * [Set 3 - ](#set-3-)
 * [How to Use](#how-to-use)
 
@@ -26,11 +26,11 @@ The first one consists of PSO (Particle Swarm Optimization) and DE (Differential
 The second one are Bat and Butterfly optimization algorithms.
 The third one are
 
-## Set 1 - PSO & DE    
+## Set 1 - PSO and DE    
 Particle Swarm Optimization - algorithm can be found in `Exercise_1_PSO_DE\PSO.py` file      
 Differential Evolution - algorithm can be found in `Exercise_1_PSO_DE\DE.py` file              
  
-## Set 2 - Butterfly and Bat algorithms
+## Set 2 - Bat and butterfly algorithms
 Butterfly - algorithm can be found in `Exercise_2_Butterfly_Bat\Butterfly.py` file
 Bat - algorithm can be found in `Exercise_2_Butterfly_Bat\Bat.py` file  
 
