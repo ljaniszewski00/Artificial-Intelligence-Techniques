@@ -6,14 +6,16 @@
 * [Status](#status)
 * [Detailed descriptions](#detailed-descriptions)
 * [Set 1 - PSO & DE](#set-1-pso-&-de) 
-* [Set 2 - ](#set-2-)
+* [Set 2 - Bat & Butterfly](#set-2-bat-&-butterfly)
 * [Set 3 - ](#set-3-)
+* [How to Use](#how-to-use)
 
 ## General info
 Implementations of various algorithms used to solve complex problems
 
 ## Technologies
-Python 3.10
+- Python 3.10
+- Numpy
 
 ## Status
 In Progress
@@ -27,8 +29,16 @@ The third one are
 ## Set 1 - PSO & DE    
 Particle Swarm Optimization - algorithm can be found in `Exercise_1_PSO_DE\PSO.py` file      
 Differential Evolution - algorithm can be found in `Exercise_1_PSO_DE\DE.py` file              
+ 
+## Set 2 - Butterfly and Bat algorithms
+Butterfly - algorithm can be found in `Exercise_2_Butterfly_Bat\Butterfly.py` file
+Bat - algorithm can be found in `Exercise_2_Butterfly_Bat\Bat.py` file  
 
-### How To Use
+## Set 3 -    
+ - algorithm can be found in `.py` file      
+ - algorithm can be found in `.py` file
+
+## How to Use
 After changing directory to `[PROJECT DIR]\Main`, the program can be executed like:
 
 `python .\main.py 1 True 70 1 20 1 100`
@@ -73,37 +83,3 @@ Function number 2:
 
 Function number 3:     
 <img src="https://github.com/ljaniszewski00/Artificial-Intelligence-Techniques/blob/master/Assets/Rosenbrock%20function%20description.png?raw=true" width="850" height="80"> 
-
-
-     
-## Set 2 - Butterfly and Bat algorithms
-Butterfly - algorithm can be found in `Exercise_2_Butterfly_Bat\Butterfly.py` file
-Bat - algorithm can be found in `Exercise_2_Butterfly_Bat\Bat.py` file  
-
-### How To Use
-
-    
-#### Scheme:
-
-    
-#### Where:
-
-
-#### What's more:
-
-      
-## Set 3 -    
- - algorithm can be found in `.py` file      
- - algorithm can be found in `.py` file              
-
-### How To Use
-
-    
-#### Scheme:
-
-    
-#### Where:
-
-
-#### What's more:
-
