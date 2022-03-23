@@ -1,6 +1,6 @@
 import random
 import copy
-from Exercise_1_PSO_DE.utils import calculate_function_value
+from Utils.utils import calculate_function_value
 import numpy as np
 
 

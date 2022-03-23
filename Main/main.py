@@ -4,9 +4,13 @@ import sys
 sys.path.append("C:\\Users\\jakub\\Desktop\\DE\\Artificial-Intelligence-Techniques")
 sys.path.append("C:\\Users\\jakub\\Desktop\\DE\\Artificial-Intelligence-Techniques\\Exercise_1_PSO_DE")
 sys.path.append("Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques")
-sys.path.append("Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques/Exercise_1_PSO_DE")
+sys.path.append(
+    "Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques/Exercise_1_PSO_DE")
 
-from Exercise_1_PSO_DE.PSO_DE_Manager import create_pso_and_de_objects, get_data_for_first_exercise, start_algorithms
+from Exercise_1_PSO_DE.PSO_DE_Manager import create_pso_and_de_objects, start_algorithms
+from Exercise_2_Butterfly_Bat.Butterfly_Bat_Manager import create_butterfly_and_bat_objects, \
+    start_algorithms as start_second_set_of_algorithms
+from Utils.utils import get_data_from_user
 
 
 def intro():
@@ -31,17 +35,18 @@ def intro():
         print()
         print("Choose which exercise's algorithms you would like to use:")
         print("1 - Particle Swarm Optimization, Differential Evolution")
-        print("2 - ")
+        print("2 - Bat and Butterfly optimization algorithms")
         print("3 - ")
         print()
         user_choice = int(input("Your choice: "))
         while user_choice not in [1, 2, 3]:
             print("Please choose option 1 or 2 or 3!")
             user_choice = int(input("Your choice: "))
-        if user_choice == 1:
-            stop_condition_number, static_coefficients, population_number, function_number, dimensions_number, \
-            max_iterations_number_or_accuracy = get_data_for_first_exercise()
 
+        stop_condition_number, static_coefficients, population_number, function_number, dimensions_number, \
+        max_iterations_number_or_accuracy = get_data_from_user(user_choice)
+
+        if user_choice == 1:
             pso, de = create_pso_and_de_objects(stop_condition_number, static_coefficients, population_number,
                                                 function_number, dimensions_number,
                                                 max_iterations_number_or_accuracy)
@@ -49,9 +54,16 @@ def intro():
             start_algorithms(pso, de)
 
         elif user_choice == 2:
-            exercise2_intro()
+            bat_algorithm, butterfly_algoritms = create_butterfly_and_bat_objects(stop_condition_number,
+                                                                                  static_coefficients,
+                                                                                  population_number,
+                                                                                  function_number,
+                                                                                  dimensions_number,
+                                                                                  max_iterations_number_or_accuracy)
+            start_second_set_of_algorithms(bat_algorithm, butterfly_algoritms)
+
         elif user_choice == 3:
-            exercise3_intro()
+            pass
     else:
         # Assigning args to variables
         exercise_number = int(args.exercise_number)
@@ -74,26 +86,24 @@ def intro():
             if static_coefficients not in [True, False] \
                     or function_number not in [1, 2, 3] or stop_condition_number not in [1, 2]:
                 stop_condition_number, static_coefficients, population_number, function_number, dimensions_number, \
-                max_iterations_number_or_accuracy = get_data_for_first_exercise()
+                max_iterations_number_or_accuracy = get_data_from_user(exercise_number)
 
             pso, de = create_pso_and_de_objects(stop_condition_number, static_coefficients, population_number,
-                                                function_number, dimensions_number,
-                                                max_iterations_number_or_accuracy)
+                                                function_number, dimensions_number, max_iterations_number_or_accuracy)
+
             start_algorithms(pso, de)
 
         elif exercise_number == 2:
-            print("HI")
+            bat_algorithm, butterfly_algoritms = create_butterfly_and_bat_objects(stop_condition_number,
+                                                                                  static_coefficients,
+                                                                                  population_number,
+                                                                                  function_number,
+                                                                                  dimensions_number,
+                                                                                  max_iterations_number_or_accuracy)
+            start_second_set_of_algorithms(bat_algorithm, butterfly_algoritms)
 
         elif exercise_number == 3:
             print("HI")
-
-
-def exercise2_intro():
-    print("temp2")
-
-
-def exercise3_intro():
-    print("temp3")
 
 
 # Beginning of the program execution
