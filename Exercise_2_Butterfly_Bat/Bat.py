@@ -71,10 +71,13 @@ class Bat:
         self.accuracy = accuracy
 
         self.current_iteration = 0
-        self.loudness_decay = 0.5
+        self.loudness_decay = 4
         self.loudness_limit = 0.05
-        self.pulse_rate_decay = 0.5
-        self.gamma = 0.5
+        self.pulse_rate_decay = 4
+        self.gamma = 4
+
+        self.minimum_frequency = 0.0
+        self.maximum_frequency = 2.0
 
         self.update_adaptations_for_whole_population()
         self.best_global = sys.float_info.max
@@ -84,18 +87,18 @@ class Bat:
 
         self.start_algorithm()
 
-    def update_bats_frequency(self, bat):
-        bat.update_frequency()
+    def update_bats_frequencies(self, bat):
+        bat.update_frequency(self.minimum_frequency, self.maximum_frequency)
 
     def update_bats_velocities(self, bat):
         bat.update_velocities(self.best_global_positions)
 
     def update_bats_positions(self, bat):
+        # print(f"Current iteration: {self.current_iteration}")
         loudness_all = 0
         for bat_iteration in self.bats:
             loudness_all += bat_iteration.loudness
-        loudness_mean = np.mean(loudness_all)
-        bat.update_positions(loudness_mean)
+        bat.update_positions()
 
     def update_adaptations_for_whole_population(self):
         for bat in self.bats:
@@ -111,10 +114,14 @@ class Bat:
     def update_global_best(self):
         for bat in self.bats:
             if bat.adaptation < self.best_global:
+                print("NOW WAS A CHANGE:")
                 self.best_global = bat.adaptation
                 self.best_global_positions = copy.copy(bat.positions)
                 self.best_globals.append(self.best_global)
                 self.best_globals_iterations.append(self.current_iteration)
+                print(f"New best global: {self.best_global}")
+                print(f"New best global iterations: {self.best_globals_iterations}")
+                print()
 
     def print_particles_positions(self):
         print()
@@ -134,22 +141,28 @@ class Bat:
         if self.max_iterations is not None:
             while self.current_iteration < self.max_iterations:
                 for bat in self.bats:
-                    self.update_bats_frequency(bat)
+                    # self.print_particles_positions()
+                    # print()
+                    # self.print_particles_velocities()
+                    # print(self.best_global)
+                    # print(self.best_globals_iterations)
+                    self.update_bats_frequencies(bat)
                     self.update_bats_velocities(bat)
                     self.update_bats_positions(bat)
                     self.update_bats_adaptations(bat)
                     self.update_global_best()
-                    self.update_bats_pulse_rate_and_loudness(bat)
+                    # self.update_bats_pulse_rate_and_loudness(bat)
+                # print(f"Current iteration: {self.current_iteration}")
                 self.current_iteration += 1
         else:
             while abs(self.best_global) >= self.accuracy:
                 for bat in self.bats:
-                    self.update_bats_frequency(bat)
+                    self.update_bats_frequencies(bat)
                     self.update_bats_velocities(bat)
                     self.update_bats_positions(bat)
                     self.update_bats_adaptations(bat)
                     self.update_global_best()
-                    self.update_bats_pulse_rate_and_loudness(bat)
+                    # self.update_bats_pulse_rate_and_loudness(bat)
                 self.current_iteration += 1
 
         return round(self.best_global, 4), self.best_global_positions, self.best_globals, self.best_globals_iterations, \
