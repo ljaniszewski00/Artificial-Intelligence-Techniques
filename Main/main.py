@@ -1,11 +1,17 @@
 import argparse
 import sys
 
+# Windows (Jakub) path imports
 sys.path.append("C:\\Users\\jakub\\Desktop\\DE\\Artificial-Intelligence-Techniques")
 sys.path.append("C:\\Users\\jakub\\Desktop\\DE\\Artificial-Intelligence-Techniques\\Exercise_1_PSO_DE")
+
+# Windows (Łukasz) path imports
 sys.path.append("Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques")
 sys.path.append(
     "Q:/BACKUP/UCZELNIA/SEMESTR 6/Techniki sztucznej inteligencji/Artificial Intelligence Techniques/Exercise_1_PSO_DE")
+
+# MacOS path imports
+sys.path.append("/Users/vader/Developer/PYTHON/Artificial-Intellgence-Techniques")
 
 from Exercise_1_PSO_DE.PSO_DE_Manager import create_pso_and_de_objects, start_algorithms
 from Exercise_2_Butterfly_Bat.Butterfly_Bat_Manager import create_butterfly_and_bat_objects, \
