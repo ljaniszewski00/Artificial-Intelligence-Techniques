@@ -54,9 +54,9 @@ The scheme of Bat algorithm
         3.2.4. If bat's new function value is better than global's best solution, assign it as global's best
 """
 import copy
+import random
 import sys
-
-import numpy as np
+from Utils.utils import calculate_function_value
 
 
 class Bat:
@@ -71,13 +71,7 @@ class Bat:
         self.accuracy = accuracy
 
         self.current_iteration = 0
-        self.loudness_decay = 4
-        self.loudness_limit = 0.05
-        self.pulse_rate_decay = 4
-        self.gamma = 4
-
-        self.minimum_frequency = 0.0
-        self.maximum_frequency = 2.0
+        self.gamma = 2
 
         self.update_adaptations_for_whole_population()
         self.best_global = sys.float_info.max
@@ -88,17 +82,17 @@ class Bat:
         self.start_algorithm()
 
     def update_bats_frequencies(self, bat):
-        bat.update_frequency(self.minimum_frequency, self.maximum_frequency)
+        bat.update_frequency()
 
     def update_bats_velocities(self, bat):
         bat.update_velocities(self.best_global_positions)
 
-    def update_bats_positions(self, bat):
+    def update_bats_positions(self, bat, second_time=False):
         # print(f"Current iteration: {self.current_iteration}")
-        loudness_all = 0
-        for bat_iteration in self.bats:
-            loudness_all += bat_iteration.loudness
-        bat.update_positions()
+        if not second_time:
+            bat.update_positions()
+        else:
+            bat.update_positions(True)
 
     def update_adaptations_for_whole_population(self):
         for bat in self.bats:
@@ -108,8 +102,9 @@ class Bat:
         bat.update_adaptation()
 
     def update_bats_pulse_rate_and_loudness(self, bat):
-        bat.update_pulse_rate_and_loudness(self.pulse_rate_decay, self.loudness_decay, self.loudness_limit, self.gamma,
-                                           self.current_iteration)
+        rand = random.uniform(0, 1)
+        if rand < bat.loudness and calculate_function_value(self.function_number, bat) < self.best_global:
+            bat.update_pulse_rate_and_loudness(self.gamma, self.current_iteration)
 
     def update_global_best(self):
         for bat in self.bats:
@@ -146,23 +141,27 @@ class Bat:
                     # self.print_particles_velocities()
                     # print(self.best_global)
                     # print(self.best_globals_iterations)
-                    self.update_bats_frequencies(bat)
                     self.update_bats_velocities(bat)
                     self.update_bats_positions(bat)
                     self.update_bats_adaptations(bat)
                     self.update_global_best()
-                    # self.update_bats_pulse_rate_and_loudness(bat)
+                    self.update_bats_frequencies(bat)
+                    self.update_bats_positions(bat, True)
+                    self.update_bats_pulse_rate_and_loudness(bat)
+                    self.update_global_best()
                 # print(f"Current iteration: {self.current_iteration}")
                 self.current_iteration += 1
         else:
             while abs(self.best_global) >= self.accuracy:
                 for bat in self.bats:
-                    self.update_bats_frequencies(bat)
                     self.update_bats_velocities(bat)
                     self.update_bats_positions(bat)
                     self.update_bats_adaptations(bat)
                     self.update_global_best()
-                    # self.update_bats_pulse_rate_and_loudness(bat)
+                    self.update_bats_frequencies(bat)
+                    self.update_bats_positions(bat, True)
+                    self.update_bats_pulse_rate_and_loudness(bat)
+                    self.update_global_best()
                 self.current_iteration += 1
 
         return round(self.best_global, 4), self.best_global_positions, self.best_globals, self.best_globals_iterations, \

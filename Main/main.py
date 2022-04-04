@@ -1,6 +1,10 @@
 import argparse
 import sys
 
+# in case of GIT pull:
+#   > git reset --hard FETCH_HEAD
+#   > git pull
+
 # Windows (Jakub) path imports
 sys.path.append("C:\\Users\\jakub\\Desktop\\DE\\Artificial-Intelligence-Techniques")
 sys.path.append("C:\\Users\\jakub\\Desktop\\DE\\Artificial-Intelligence-Techniques\\Exercise_1_PSO_DE")
