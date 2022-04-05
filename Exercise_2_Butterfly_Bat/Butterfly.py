@@ -36,7 +36,6 @@ value holds the best solution
                         f - fragrance
         4.2.3. Calculate function value from butterfly positions and determine if it's better than the best solution.
         If yes, save it as the best solution
-        4.2.4. Update the value of a
 
 """
 import copy
@@ -98,9 +97,6 @@ class Butterfly:
             self.best_globals.append(self.best_global)
             self.best_globals_iterations.append(self.current_iteration)
 
-    def update_power_exponent(self, butterfly):
-        butterfly.update_power_exponent()
-
     def print_particles_positions(self):
         print()
         print("Particles Positions:")
@@ -121,7 +117,6 @@ class Butterfly:
                 self.update_fragrance_for_whole_population()
                 for butterfly in self.butterflies:
                     self.update_butterfly_positions(butterfly)
-                    self.update_power_exponent(butterfly)
                     self.update_butterfly_adaptations(butterfly)
                     self.update_global_best(butterfly)
                 self.current_iteration += 1
@@ -130,7 +125,6 @@ class Butterfly:
                 self.update_fragrance_for_whole_population()
                 for butterfly in self.butterflies:
                     self.update_butterfly_positions(butterfly)
-                    self.update_power_exponent(butterfly)
                     self.update_butterfly_adaptations(butterfly)
                     self.update_global_best(butterfly)
                 self.current_iteration += 1

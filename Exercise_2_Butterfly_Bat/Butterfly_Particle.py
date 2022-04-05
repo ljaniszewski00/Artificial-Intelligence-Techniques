@@ -1,6 +1,4 @@
 import random
-import copy
-import numpy as np
 from Utils.utils import calculate_function_value
 
 
@@ -11,8 +9,8 @@ class ButterflyParticle:
         self.dimensions = dimensions
         self.positions = [random.uniform(function_range[0], function_range[1]) for e in range(dimensions)]
 
-        self.c = random.uniform(0, 1)
-        self.a = random.uniform(0, 1)
+        self.c = 0.02
+        self.a = 0.02
         self.p = random.uniform(0, 1)
 
         self.adaptation = calculate_function_value(self.function_number, self)
@@ -25,9 +23,6 @@ class ButterflyParticle:
 
     def update_fragrance(self):
         self.F = self.c * pow(self.I, self.a)
-
-    def update_power_exponent(self):
-        pass
 
     def update_positions(self, global_best, first_random_butterfly_positions,
                          second_random_butterfly_positions):
