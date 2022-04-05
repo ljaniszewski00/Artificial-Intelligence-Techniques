@@ -18,7 +18,6 @@ class BatParticle:
         self.update_frequency()
 
         self.adaptation = calculate_function_value(self.function_number, self)
-        self.local_best = self.adaptation
 
         self.pulse_rate = random.uniform(0, 1)
         self.initial_pulse_rate = self.pulse_rate
@@ -29,19 +28,13 @@ class BatParticle:
         self.adaptation = calculate_function_value(self.function_number, self)
 
     def update_frequency(self):
-        self.frequency = self.minimum_frequency + (self.maximum_frequency - self.minimum_frequency) * random.uniform(0, 1)
+        self.frequency = self.minimum_frequency + (self.maximum_frequency - self.minimum_frequency) * \
+                         random.uniform(0, 1)
 
     def update_velocities(self, best_bat_positions):
         for dimension in range(self.dimensions):
-            new_velocity = self.velocities[dimension] + \
+            self.velocities[dimension] = self.velocities[dimension] + \
                            (self.positions[dimension] - best_bat_positions[dimension]) * self.frequency
-
-            if new_velocity < self.function_range[0]:
-                self.velocities[dimension] = self.function_range[0]
-            elif new_velocity > self.function_range[1]:
-                self.velocities[dimension] = self.function_range[1]
-            else:
-                self.velocities[dimension] = new_velocity
 
     def update_positions(self, second_time=False):
         if not second_time:
@@ -55,18 +48,14 @@ class BatParticle:
         else:
             rand = random.uniform(0, 1)
             if rand < self.pulse_rate:
+                epsilon = 0.02
                 for dimension in range(self.dimensions):
-                    epsilon = 0.02
                     self.positions[dimension] += epsilon * self.loudness
 
                     if self.positions[dimension] < self.function_range[0]:
                         self.positions[dimension] = self.function_range[0]
                     elif self.positions[dimension] > self.function_range[1]:
                         self.positions[dimension] = self.function_range[1]
-
-    def update_local_best(self, adaptation):
-        if adaptation < self.local_best:
-            self.local_best = adaptation
 
     def update_pulse_rate_and_loudness(self, gamma, iteration_number):
         self.pulse_rate = self.initial_pulse_rate * (1 - np.exp(-gamma * iteration_number))

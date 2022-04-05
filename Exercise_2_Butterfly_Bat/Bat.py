@@ -71,24 +71,23 @@ class Bat:
         self.accuracy = accuracy
 
         self.current_iteration = 0
-        self.gamma = 2
+        self.gamma = 1
 
         self.update_adaptations_for_whole_population()
-        self.best_global = sys.float_info.max
+        self.best_global = min(bat.adaptation for bat in self.bats)
         self.best_global_positions = [0 for e in range(dimensions)]
         self.best_globals = [self.best_global]
         self.best_globals_iterations = [0]
 
         self.start_algorithm()
 
-    def update_bats_frequencies(self, bat):
+    def update_bats_frequency(self, bat):
         bat.update_frequency()
 
     def update_bats_velocities(self, bat):
         bat.update_velocities(self.best_global_positions)
 
     def update_bats_positions(self, bat, second_time=False):
-        # print(f"Current iteration: {self.current_iteration}")
         if not second_time:
             bat.update_positions()
         else:
@@ -109,14 +108,10 @@ class Bat:
     def update_global_best(self):
         for bat in self.bats:
             if bat.adaptation < self.best_global:
-                print("NOW WAS A CHANGE:")
                 self.best_global = bat.adaptation
                 self.best_global_positions = copy.copy(bat.positions)
                 self.best_globals.append(self.best_global)
                 self.best_globals_iterations.append(self.current_iteration)
-                print(f"New best global: {self.best_global}")
-                print(f"New best global iterations: {self.best_globals_iterations}")
-                print()
 
     def print_particles_positions(self):
         print()
@@ -132,37 +127,28 @@ class Bat:
             print(bat.velocities)
         print()
 
+    def execute_algorithm_operations(self):
+        for bat in self.bats:
+            self.update_bats_velocities(bat)
+            self.update_bats_positions(bat)
+            self.update_bats_adaptations(bat)
+            self.update_bats_frequency(bat)
+        self.update_global_best()
+        for bat in self.bats:
+            self.update_bats_positions(bat, True)
+            self.update_bats_pulse_rate_and_loudness(bat)
+        self.update_global_best()
+        self.current_iteration += 1
+
     def start_algorithm(self):
         if self.max_iterations is not None:
             while self.current_iteration < self.max_iterations:
-                for bat in self.bats:
-                    # self.print_particles_positions()
-                    # print()
-                    # self.print_particles_velocities()
-                    # print(self.best_global)
-                    # print(self.best_globals_iterations)
-                    self.update_bats_velocities(bat)
-                    self.update_bats_positions(bat)
-                    self.update_bats_adaptations(bat)
-                    self.update_global_best()
-                    self.update_bats_frequencies(bat)
-                    self.update_bats_positions(bat, True)
-                    self.update_bats_pulse_rate_and_loudness(bat)
-                    self.update_global_best()
-                # print(f"Current iteration: {self.current_iteration}")
-                self.current_iteration += 1
+                print(self.best_global)
+                print()
+                self.execute_algorithm_operations()
         else:
             while abs(self.best_global) >= self.accuracy:
-                for bat in self.bats:
-                    self.update_bats_velocities(bat)
-                    self.update_bats_positions(bat)
-                    self.update_bats_adaptations(bat)
-                    self.update_global_best()
-                    self.update_bats_frequencies(bat)
-                    self.update_bats_positions(bat, True)
-                    self.update_bats_pulse_rate_and_loudness(bat)
-                    self.update_global_best()
-                self.current_iteration += 1
+                self.execute_algorithm_operations()
 
-        return round(self.best_global, 4), self.best_global_positions, self.best_globals, self.best_globals_iterations, \
-               self.current_iteration
+        return round(self.best_global, 4), self.best_global_positions, self.best_globals, \
+               self.best_globals_iterations, self.current_iteration

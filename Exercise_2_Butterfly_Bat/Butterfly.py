@@ -57,7 +57,7 @@ class Butterfly:
         self.current_iteration = 0
 
         self.update_adaptations_for_whole_population()
-        self.best_global = sys.float_info.max
+        self.best_global = min(butterfly.adaptation for butterfly in self.butterflies)
         self.best_global_positions = [0 for e in range(dimensions)]
         self.best_globals = [self.best_global]
         self.best_globals_iterations = [0]
@@ -73,11 +73,19 @@ class Butterfly:
             butterfly.update_adaptation()
 
     def update_butterfly_positions(self, butterfly):
-        first_random_butterfly_number = random.randint(0, self.population_number-1)
+        first_random_butterfly_number = random.randint(0, self.population_number - 1)
         second_random_butterfly_number = random.randint(0, self.population_number - 1)
+        first_random_butterfly = self.butterflies[first_random_butterfly_number]
+        second_random_butterfly = self.butterflies[second_random_butterfly_number]
+        while first_random_butterfly == butterfly:
+            first_random_butterfly_number = random.randint(0, self.population_number - 1)
+            first_random_butterfly = self.butterflies[first_random_butterfly_number]
+        while second_random_butterfly == butterfly:
+            second_random_butterfly_number = random.randint(0, self.population_number - 1)
+            second_random_butterfly = self.butterflies[second_random_butterfly_number]
         butterfly.update_positions(self.best_global,
-                                   self.butterflies[first_random_butterfly_number].positions,
-                                   self.butterflies[second_random_butterfly_number].positions)
+                                   first_random_butterfly.positions,
+                                   second_random_butterfly.positions)
 
     def update_butterfly_adaptations(self, butterfly):
         butterfly.update_adaptation()
@@ -111,23 +119,21 @@ class Butterfly:
             print(butterfly.velocities)
         print()
 
+    def execute_algorithm_operations(self):
+        self.update_fragrance_for_whole_population()
+        for butterfly in self.butterflies:
+            self.update_butterfly_positions(butterfly)
+            self.update_butterfly_adaptations(butterfly)
+            self.update_global_best(butterfly)
+        self.current_iteration += 1
+
     def start_algorithm(self):
         if self.max_iterations is not None:
             while self.current_iteration < self.max_iterations:
-                self.update_fragrance_for_whole_population()
-                for butterfly in self.butterflies:
-                    self.update_butterfly_positions(butterfly)
-                    self.update_butterfly_adaptations(butterfly)
-                    self.update_global_best(butterfly)
-                self.current_iteration += 1
+                self.execute_algorithm_operations()
         else:
             while abs(self.best_global) >= self.accuracy:
-                self.update_fragrance_for_whole_population()
-                for butterfly in self.butterflies:
-                    self.update_butterfly_positions(butterfly)
-                    self.update_butterfly_adaptations(butterfly)
-                    self.update_global_best(butterfly)
-                self.current_iteration += 1
+                self.execute_algorithm_operations()
 
         return round(self.best_global, 4), self.best_global_positions, self.best_globals, self.best_globals_iterations, \
                self.current_iteration
