@@ -96,6 +96,31 @@ def calculate_function_value(function_number, particle):
         return value
 
 
+def calculate_function_value_with_positons(function_number, positions):
+    value = 0
+    if function_number == 1:
+        # Sphere
+        for iteration_number in range(1, len(positions) + 1):
+            value += pow(positions[iteration_number-1], 2)
+        return value
+    elif function_number == 2:
+        # Schwefel
+        for iteration_number in range(1, len(positions) + 1):
+            value += pow(abs(positions[iteration_number-1]), 2)
+        temp_value = 1
+        for iteration_number in range(1, len(positions) + 1):
+            temp_value *= abs(positions[iteration_number-1])
+        value += temp_value
+        return value
+    elif function_number == 3:
+        # Rosenbrock
+        for iteration_number in range(1, len(positions)):
+            value += 100 * (pow(positions[iteration_number] -
+                            pow(positions[iteration_number-1], 2), 2) +
+                            pow(positions[iteration_number-1] - 1, 2))
+        return value
+
+
 def generate_chart(first_algorithm_name, first_algorithm_best_globals_iterations, first_algorithm_global_values,
                    second_algorithm_name, second_algorithm_globals_iterations, second_algorithm_global_values):
     plt.plot(first_algorithm_best_globals_iterations, first_algorithm_global_values, color='r',
