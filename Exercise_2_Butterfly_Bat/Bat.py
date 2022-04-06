@@ -56,6 +56,9 @@ The scheme of Bat algorithm
 import copy
 import random
 import sys
+
+import numpy as np
+
 from Utils.utils import calculate_function_value
 
 
@@ -71,7 +74,7 @@ class Bat:
         self.accuracy = accuracy
 
         self.current_iteration = 0
-        self.gamma = 1
+        self.gamma = 0.05
 
         self.update_adaptations_for_whole_population()
         self.best_global = min(bat.adaptation for bat in self.bats)
@@ -131,7 +134,6 @@ class Bat:
         for bat in self.bats:
             self.update_bats_velocities(bat)
             self.update_bats_positions(bat)
-            self.update_bats_adaptations(bat)
             self.update_bats_frequency(bat)
         self.update_global_best()
         for bat in self.bats:

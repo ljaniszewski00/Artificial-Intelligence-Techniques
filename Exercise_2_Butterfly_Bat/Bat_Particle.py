@@ -48,7 +48,7 @@ class BatParticle:
         else:
             rand = random.uniform(0, 1)
             if rand < self.pulse_rate:
-                epsilon = 0.02
+                epsilon = random.uniform(-1, 1)
                 for dimension in range(self.dimensions):
                     self.positions[dimension] += epsilon * self.loudness
 
