@@ -55,9 +55,6 @@ The scheme of Bat algorithm
 """
 import copy
 import random
-import sys
-
-import numpy as np
 
 from Utils.utils import calculate_function_value_with_positons
 
@@ -74,8 +71,8 @@ class Bat:
         self.accuracy = accuracy
 
         self.current_iteration = 0
-        self.alpha = 0.99
-        self.gamma = 0.9
+        self.alpha = 0
+        self.gamma = 0
 
         self.update_adaptations_for_whole_population()
         self.best_global = min(bat.adaptation for bat in self.bats)

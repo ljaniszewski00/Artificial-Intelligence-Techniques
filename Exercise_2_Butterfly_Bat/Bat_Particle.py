@@ -34,7 +34,7 @@ class BatParticle:
     def update_velocities(self, best_bat_positions):
         for dimension in range(self.dimensions):
             self.velocities[dimension] = self.velocities[dimension] + \
-                           (self.positions[dimension] - best_bat_positions[dimension]) * self.frequency
+                           (best_bat_positions[dimension] - self.positions[dimension]) * self.frequency
 
     def update_positions(self):
         for dimension in range(self.dimensions):
@@ -65,5 +65,5 @@ class BatParticle:
                 self.positions[dimension] = self.function_range[1]
 
     def update_pulse_rate_and_loudness(self, alpha, gamma, iteration_number):
-        self.pulse_rate = self.pulse_rate * (1 - np.exp(-gamma * iteration_number))
-        self.loudness = alpha * self.loudness
+        self.pulse_rate = self.initial_pulse_rate * (1 - np.exp(-gamma * iteration_number))
+        self.loudness = alpha * self.initial_loudness
