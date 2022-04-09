@@ -71,6 +71,7 @@ Choose algorithm stop condition:
 
         return stop_condition, static_coefficients, population_number, function_number, dimensions_number, accuracy
 
+
 def calculate_function_value(function_number, particle):
     value = 0
     if function_number == 1:

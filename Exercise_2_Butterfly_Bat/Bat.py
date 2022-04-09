@@ -1,61 +1,65 @@
 """
 The scheme of Bat algorithm
-1. Create particles (bats) on the basis of data given by the user (dimensions number, function range, parameters) and:
+1. Create particles (bats) on the basis of data given by the user (dimensions number, function range, parameters) and
+for every bat:
     1.1. Assign random starting position from given range for each dimension
-    1.2. Assign velocity v = rand(1, function_range)
-    1.3. Assign pulse rate r = rand(N, 1) or rand(0, 1)
-    1.4. Assign loudness A = rand(N, 1) * 2 or rand(0, 1) * 2
-    1.5. Assign frequency f = 2 * rand(0, 1) -> (save this rand for later)
-2. For every bat from set:
-    2.1. Calculate the current value of function with bat's positions
-    2.2. Save current position of the bat as it's best local solution
-    2.3. If bat's position is better than the global solution, assign it as global one
-3. Until end condition has not been fulfilled (max iteration number or given accuracy):
-    3.1. For every bat from set:
-        3.1.1. Update frequency using the equation:
+    1.2. Assign random velocities from given range for each dimension
+    1.3. Assign pulse rate r as random number from range (0, 1)
+    1.4. Assign loudness A as random number from range (1, 2)
+    1.5. Save initial pulse rate and loudness for later change of these parameters
+    1.5. Assign frequency = 0, minimum frequency = 0 and maximum frequency = 2
+2. Set parameters for algorithm:
+    2.1. Set gamma = 0.5
+    2.2. Set alpha = 0.5
+3. For every bat from set:
+    3.1. Calculate the current value of function with bat's positions
+    3.2. Save current position of the bat as it's best local solution
+    3.3. If bat's position is better than the global solution, assign it as global one
+4. Until end condition has not been fulfilled (max iteration number or given accuracy):
+    4.1. For every bat from set:
+        4.1.1. Update velocity using the equation:
+            v = v + (xbest - x) * f
+                where:
+                    v - bat's velocity
+                    x - current bat's position
+                    xbest - current best global solution
+                    f - frequency
+        4.1.2. Update positions for every bat with the equation:
+            x = x + v
+                where:
+                    x - bat's position
+                    v - bat's velocity
+        4.1.3. Update it's adaptation (calculate function value)
+        4.1.4. Update frequency using the equation:
             f = fmin + (fmax - fmin) * B
                 where:
                     fmin - frequency range minimum = 0
                     fmax - frequency range maximum = 1
                     B - random number between 0 and 1
-        3.1.2. Update velocity using the equation:
-            v = v + (x - xbest) * f
-                where:
-                    v - bat's velocity
-                    x - current bat's position
-                    xbest - current global best bat's position
-                    f - frequency
-        3.1.3. Update positions for every bat with the equation:
-            x = x + v
-                where:
-                    x - bat's position
-                    v - bat's velocity
-    3.2. For every bat from set:
-        3.2.1. If r > rand(0, 1) -> same rand as used in 1.1.5.:
-            3.2.1.1. Select a solution among the bats as the best solution (bat with the biggest frequency value)
-            3.2.1.2. Generate local solution around best solution with equation:
+    4.2. Determine best global value along with position of the bat that achieved it
+    4.3. For every bat from set:
+        4.3.1. If pulse rate > random value from range (0, 1):
+            4.3.1.1. Update bat's position:
                 x = x + ε * A,
                     where:
                         x - current bat's position
                         ε - random number between -1 and 1
-                        A - loudness value
-        3.2.2. If rand < A and function value < current best function value, save calculated
+                        A - loudness value of current bat OR average loudness value of all bats
+        4.3.2. If rand < A and function value < current best function value, save calculated
         function value as current best solution, reduce loudness and increase pulse rate with equations:
             A = α * A,
                 where:
-                    A - loudness value
+                    A - loudness value OR initial loudness value
                     α - alpha value - random value between 0 and 1
             r = r * (1 - e ** (-yt)),
                 where:
-                    r - pulse rate
+                    r - pulse rate value OR initial pulse rate value
                     γ - gamma value - random value between 0 and 1
                     t - iteration number
-        3.2.3. Calculate bat's function value with it's positions
-        3.2.4. If bat's new function value is better than global's best solution, assign it as global's best
+    4.4 Determine best global value along with position of the bat that achieved it
 """
 import copy
 import random
-import sys
 from Utils.utils import calculate_function_value
 
 
@@ -71,7 +75,8 @@ class Bat:
         self.accuracy = accuracy
 
         self.current_iteration = 0
-        self.gamma = 1
+        self.gamma = 0.5
+        self.alpha = 0.5
 
         self.update_adaptations_for_whole_population()
         self.best_global = min(bat.adaptation for bat in self.bats)
@@ -87,11 +92,17 @@ class Bat:
     def update_bats_velocities(self, bat):
         bat.update_velocities(self.best_global_positions)
 
-    def update_bats_positions(self, bat, second_time=False):
+    def calculate_avg_loudness(self):
+        avg_loudness = 0
+        for bat in self.bats:
+            avg_loudness += bat.loudness
+        return avg_loudness / self.population_number
+
+    def update_bats_positions(self, bat, second_time=False, avg_loudness=None):
         if not second_time:
             bat.update_positions()
         else:
-            bat.update_positions(True)
+            bat.update_positions(True, avg_loudness)
 
     def update_adaptations_for_whole_population(self):
         for bat in self.bats:
@@ -103,7 +114,7 @@ class Bat:
     def update_bats_pulse_rate_and_loudness(self, bat):
         rand = random.uniform(0, 1)
         if rand < bat.loudness and calculate_function_value(self.function_number, bat) < self.best_global:
-            bat.update_pulse_rate_and_loudness(self.gamma, self.current_iteration)
+            bat.update_pulse_rate_and_loudness(self.gamma, self.alpha, self.current_iteration)
 
     def update_global_best(self):
         for bat in self.bats:
@@ -128,6 +139,7 @@ class Bat:
         print()
 
     def execute_algorithm_operations(self):
+        avg_loudness = self.calculate_avg_loudness()
         for bat in self.bats:
             self.update_bats_velocities(bat)
             self.update_bats_positions(bat)
@@ -135,7 +147,7 @@ class Bat:
             self.update_bats_frequency(bat)
         self.update_global_best()
         for bat in self.bats:
-            self.update_bats_positions(bat, True)
+            self.update_bats_positions(bat, True, avg_loudness)
             self.update_bats_pulse_rate_and_loudness(bat)
         self.update_global_best()
         self.current_iteration += 1
