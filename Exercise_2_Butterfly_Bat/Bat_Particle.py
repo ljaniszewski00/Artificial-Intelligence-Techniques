@@ -34,36 +34,29 @@ class BatParticle:
     def update_velocities(self, best_bat_positions):
         for dimension in range(self.dimensions):
             self.velocities[dimension] = self.velocities[dimension] + \
-                           (best_bat_positions[dimension] - self.positions[dimension]) * self.frequency
+                           (self.positions[dimension] - best_bat_positions[dimension]) * self.frequency
 
-    def update_positions(self):
-        for dimension in range(self.dimensions):
-            self.positions[dimension] += self.velocities[dimension]
+    def update_positions(self, second_time=False):
+        if not second_time:
+            for dimension in range(self.dimensions):
+                self.positions[dimension] += self.velocities[dimension]
 
-            if self.positions[dimension] < self.function_range[0]:
-                self.positions[dimension] = self.function_range[0]
-            elif self.positions[dimension] > self.function_range[1]:
-                self.positions[dimension] = self.function_range[1]
+                if self.positions[dimension] < self.function_range[0]:
+                    self.positions[dimension] = self.function_range[0]
+                elif self.positions[dimension] > self.function_range[1]:
+                    self.positions[dimension] = self.function_range[1]
+        else:
+            rand = random.uniform(0, 1)
+            if rand < self.pulse_rate:
+                epsilon = 0.02
+                for dimension in range(self.dimensions):
+                    self.positions[dimension] += epsilon * self.loudness
 
-    def move_current_solution_to_the_best_solution(self, best_global, average_loudness):
-        for dimension in range(self.dimensions):
-            self.positions[dimension] = best_global + random.uniform(-1, 1) * average_loudness
+                    if self.positions[dimension] < self.function_range[0]:
+                        self.positions[dimension] = self.function_range[0]
+                    elif self.positions[dimension] > self.function_range[1]:
+                        self.positions[dimension] = self.function_range[1]
 
-    def generate_new_solution_by_flying_randomly(self):
-        new_solution = []
-        for dimension in range(self.dimensions):
-            new_solution.append(self.positions[dimension] + random.uniform(-0.5, 0.5))
-        return new_solution
-
-    def accept_new_solution(self, new_solution):
-        for dimension in range(self.dimensions):
-            self.positions[dimension] = new_solution[dimension]
-
-            if self.positions[dimension] < self.function_range[0]:
-                self.positions[dimension] = self.function_range[0]
-            elif self.positions[dimension] > self.function_range[1]:
-                self.positions[dimension] = self.function_range[1]
-
-    def update_pulse_rate_and_loudness(self, alpha, gamma, iteration_number):
+    def update_pulse_rate_and_loudness(self, gamma, iteration_number):
         self.pulse_rate = self.initial_pulse_rate * (1 - np.exp(-gamma * iteration_number))
-        self.loudness = alpha * self.initial_loudness
+        self.loudness = random.uniform(0, 1) * self.initial_loudness

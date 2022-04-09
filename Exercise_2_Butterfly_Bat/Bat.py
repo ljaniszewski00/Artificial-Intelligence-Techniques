@@ -55,8 +55,8 @@ The scheme of Bat algorithm
 """
 import copy
 import random
-
-from Utils.utils import calculate_function_value_with_positons
+import sys
+from Utils.utils import calculate_function_value
 
 
 class Bat:
@@ -71,8 +71,7 @@ class Bat:
         self.accuracy = accuracy
 
         self.current_iteration = 0
-        self.alpha = 0
-        self.gamma = 0
+        self.gamma = 1
 
         self.update_adaptations_for_whole_population()
         self.best_global = min(bat.adaptation for bat in self.bats)
@@ -82,54 +81,31 @@ class Bat:
 
         self.start_algorithm()
 
+    def update_bats_frequency(self, bat):
+        bat.update_frequency()
+
+    def update_bats_velocities(self, bat):
+        bat.update_velocities(self.best_global_positions)
+
+    def update_bats_positions(self, bat, second_time=False):
+        if not second_time:
+            bat.update_positions()
+        else:
+            bat.update_positions(True)
+
     def update_adaptations_for_whole_population(self):
         for bat in self.bats:
             bat.update_adaptation()
 
-    def adjust_frequencies(self, bat):
-        bat.update_frequency()
+    def update_bats_adaptations(self, bat):
+        bat.update_adaptation()
 
-    def update_velocities(self, bat):
-        bat.update_velocities(self.best_global_positions)
+    def update_bats_pulse_rate_and_loudness(self, bat):
+        rand = random.uniform(0, 1)
+        if rand < bat.loudness and calculate_function_value(self.function_number, bat) < self.best_global:
+            bat.update_pulse_rate_and_loudness(self.gamma, self.current_iteration)
 
-    def update_positions(self, bat):
-        bat.update_positions()
-
-    def generate_new_solutions(self, avg_loudness):
-        for bat in self.bats:
-            self.adjust_frequencies(bat)
-            self.update_velocities(bat)
-            self.update_positions(bat)
-            if random.uniform(0, 1) > bat.pulse_rate:
-                self.move_current_solution_to_the_best_solution(bat, avg_loudness)
-
-    def calculate_avg_loudness(self):
-        loudness = 0
-        for bat in self.bats:
-            loudness += bat.loudness
-        avg_loudness = loudness / self.population_number
-        return avg_loudness
-
-    def move_current_solution_to_the_best_solution(self, bat, avg_loudness):
-        bat.move_current_solution_to_the_best_solution(self.best_global, avg_loudness)
-
-    def generate_new_solution_by_flying_randomly(self, bat):
-        new_solution = bat.generate_new_solution_by_flying_randomly()
-        return new_solution
-
-    def check_condition(self, bat, new_solution):
-        if random.uniform(0, 1) < bat.loudness and calculate_function_value_with_positons(self.function_number, new_solution) < self.best_global:
-            return True
-        else:
-            return False
-
-    def accept_new_solution(self, bat, new_solution):
-        bat.accept_new_solution(new_solution)
-
-    def update_pulse_rate_and_loudness(self, bat):
-        bat.update_pulse_rate_and_loudness(self.alpha, self.gamma, self.current_iteration)
-
-    def find_current_best(self):
+    def update_global_best(self):
         for bat in self.bats:
             if bat.adaptation < self.best_global:
                 self.best_global = bat.adaptation
@@ -137,16 +113,31 @@ class Bat:
                 self.best_globals.append(self.best_global)
                 self.best_globals_iterations.append(self.current_iteration)
 
-    def execute_algorithm_operations(self):
-        avg_loudness = self.calculate_avg_loudness()
-        self.generate_new_solutions(avg_loudness)
+    def print_particles_positions(self):
+        print()
+        print("Particles Positions:")
         for bat in self.bats:
-            new_solution = self.generate_new_solution_by_flying_randomly(bat)
-            if self.check_condition(bat, new_solution):
-                self.accept_new_solution(bat, new_solution)
-                self.update_pulse_rate_and_loudness(bat)
-        self.update_adaptations_for_whole_population()
-        self.find_current_best()
+            print(bat.positions)
+        print()
+
+    def print_particles_velocities(self):
+        print()
+        print("Particles Velocities:")
+        for bat in self.bats:
+            print(bat.velocities)
+        print()
+
+    def execute_algorithm_operations(self):
+        for bat in self.bats:
+            self.update_bats_velocities(bat)
+            self.update_bats_positions(bat)
+            self.update_bats_adaptations(bat)
+            self.update_bats_frequency(bat)
+        self.update_global_best()
+        for bat in self.bats:
+            self.update_bats_positions(bat, True)
+            self.update_bats_pulse_rate_and_loudness(bat)
+        self.update_global_best()
         self.current_iteration += 1
 
     def start_algorithm(self):
