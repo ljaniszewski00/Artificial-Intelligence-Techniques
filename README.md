@@ -7,7 +7,6 @@
 * [Detailed descriptions](#detailed-descriptions)
 * [Set 1 - PSO and DE](#set-1-pso-and-de) 
 * [Set 2 - Bat and Butterfly algorithms](#set-2-bat-and-butterfly-algorithms)
-* [Set 3 - ](#set-3-)
 * [How to Use](#how-to-use)
 
 ## General info
@@ -21,10 +20,9 @@ Implementations of various algorithms used to solve complex problems
 In Progress
 
 ## Detailed descriptions
-This app consists of three sets.
+This app consists of two sets.
 The first one consists of PSO (Particle Swarm Optimization) and DE (Differential Evolution) algorithms and uses them in order to solve optimization problem with selected function and find it's minimum.
 The second one are Bat and Butterfly optimization algorithms.
-The third one are
 
 ## Set 1 - PSO and DE    
 Particle Swarm Optimization - algorithm can be found in `Exercise_1_PSO_DE\PSO.py` file      
@@ -33,10 +31,6 @@ Differential Evolution - algorithm can be found in `Exercise_1_PSO_DE\DE.py` fil
 ## Set 2 - Bat and butterfly algorithms
 Butterfly - algorithm can be found in `Exercise_2_Butterfly_Bat\Butterfly.py` file
 Bat - algorithm can be found in `Exercise_2_Butterfly_Bat\Bat.py` file  
-
-## Set 3 -    
- - algorithm can be found in `.py` file      
- - algorithm can be found in `.py` file
 
 ## How to Use
 After changing directory to `[PROJECT DIR]\Main`, the program can be executed like:
